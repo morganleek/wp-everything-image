@@ -4,8 +4,9 @@
   // Add Verlok Lazyload JS
   // https://github.com/verlok/lazyload
 
-  // Change parameters to single array to avoid future conflicts
+  // Add fly image resizer dependency
 
+  // Change parameters to single array to avoid future conflicts
 
 	// Images with srcset, retina sizing and lazy load
 	// Background images with lazy load
