@@ -1,17 +1,41 @@
 <?php
-  // Write Plugin Header
+	/*
+	Plugin Name: Everything Image
+	Plugin URI: http://morganleek.me/wordpress-2/everything-image
+	Description: Generate sized, lazy loaded, responsive HTML images and CSS background divs
+	Version: 0.1.0
+	Author: Morgan Leek
+	Author URI: https://morganleek.me/
+	Text Domain: everything-image
+	Domain Path: /languages
+	*/
 
-  // Add Verlok Lazyload JS
-  // https://github.com/verlok/lazyload
+	// Security
+	if ( ! defined( 'ABSPATH' ) ) {
+		exit; // Exit if accessed directly.
+	}
+
+	// Define WC_PLUGIN_FILE.
+	if ( ! defined( 'WEI_PLUGIN_FILE' ) ) {
+		define( 'WEI_PLUGIN_FILE', __FILE__ );
+	}
+
+  // Scripts
+	function wei_enqueue_scripts() {
+		wp_enqueue_script('jquery');
+
+		wp_register_script('vanilla-lazyload', WEI_PLUGIN_FILE . '/bower_components/vanilla-lazyload/dist/lazyload.min.js', array(), '11.0.5');
+
+		wp_register_script('everything-image', WEI_PLUGIN_FILE . '/wp-everything-image.php', array('jquery', 'vanilla-lazyload'), '1.0.0');
+		wp_enqueue_script('everything-image');	
+	}
+	add_action( 'wp_enqueue_scripts', 'wei_enqueue_scripts' );
 
   // Add fly image resizer dependency
 
   // Change parameters to single array to avoid future conflicts
 
-	// Images with srcset, retina sizing and lazy load
-	// Background images with lazy load
-	// Generates entire item based on reference size
-
+	// Debug
 	if(!function_exists('_d')) {
 		function _d($obj, $return = false) {
 		  if($return) {
@@ -21,8 +45,8 @@
 		}
 	}
 
-	if(!function_exists('scm_get_attachment')) {
-		function scm_get_attachment( $attachment_id ) {
+	if(!function_exists('wei_get_attachment')) {
+		function wei_get_attachment( $attachment_id ) {
 	 
 			$attachment = get_post( $attachment_id );
 			return array(
@@ -38,8 +62,8 @@
 
 
 	// Returns maximum size for image whilst maintaining an aspect ratio
-  if(!function_exists('scm_opt_ratio')) {
-	  function scm_opt_ratio($target, $dimensions) {
+  if(!function_exists('wei_opt_ratio')) {
+	  function wei_opt_ratio($target, $dimensions) {
 	    $width = $dimensions[0];
 	    $height = $dimensions[1];
 
@@ -66,8 +90,8 @@
 	  }
 	}
 
-  if(!function_exists('scm_generate_picture_source')) {
-	  function scm_generate_picture_source($url, $url_retina, $min_width, $return = true) {
+  if(!function_exists('wei_generate_picture_source')) {
+	  function wei_generate_picture_source($url, $url_retina, $min_width, $return = true) {
 	  	if(!empty($url) && !empty($url_retina) && !empty($min_width)) {
 				$return = '<source media="(min-width: ' . $min_width . 'px)" data-srcset="' . $url . ' 1x, ' . $url_retina . ' 2x">';
 	  		
@@ -79,13 +103,13 @@
 	  } 
 	}
 
-  if(!function_exists('scm_genereate_picture')) {
-	  function scm_genereate_picture($image_id, $images, $return = true) {
+  if(!function_exists('wei_genereate_picture')) {
+	  function wei_genereate_picture($image_id, $images, $return = true) {
 	  	$html = '';
-	  	$attachment = scm_get_attachment($image_id);
+	  	$attachment = wei_get_attachment($image_id);
 	  	$html .= '<picture>';
 	  		foreach($images as $i) {
-	  			$html .= scm_generate_picture_source($i[1], $i[2], $i[0]);	
+	  			$html .= wei_generate_picture_source($i[1], $i[2], $i[0]);	
 	  		}
 	  		$last = array_pop($images);
 	  		$html .= '<img class="lazy" data-src="' . $last[1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '">'; // ' . get_stylesheet_directory() . '/img/loading.gif
@@ -95,8 +119,8 @@
 	  }
 	}
 
-  if(!function_exists('scm_media_query')) {
-	  function scm_media_query($image, $class, $padding, $min_width, $retina = false) {
+  if(!function_exists('wei_media_query')) {
+	  function wei_media_query($image, $class, $padding, $min_width, $retina = false) {
 	  	$html = '';
 			
 			if($min_width > 0) {
@@ -128,23 +152,23 @@
 	  }
 	}
 
-  if(!function_exists('scm_genereate_background')) {
-	  function scm_genereate_background($image_id, $images, $sizes, $return = true) {
+  if(!function_exists('wei_genereate_background')) {
+	  function wei_genereate_background($image_id, $images, $sizes, $return = true) {
 	  	$html = '';
 
-	  	$attachment = scm_get_attachment($image_id);
+	  	$attachment = wei_get_attachment($image_id);
 	  	$images = array_reverse($images);
 
 	  	$class = 'wrapper-' . rand(1000000, 9999999) . '-' . $image_id;
 	  	
 	  	$html .= '<style>';
 	  		$last = array_key_last($images);
-	  		$html .= scm_media_query($images[$last][1], $class . ' .scm-bg', $padding, 0, false);
+	  		$html .= wei_media_query($images[$last][1], $class . ' .scm-bg', $padding, 0, false);
 	  		foreach($images as $k => $i) {
 	  			$padding = $sizes[$i[0]][1] / $sizes[$i[0]][0] * 100;
 
-	  			$html .= scm_media_query($i[1], $class . ' .scm-bg', $padding, $i[0], false); 
-	  			$html .= scm_media_query($i[2], $class . ' .scm-bg', $padding, $i[0], true); 
+	  			$html .= wei_media_query($i[1], $class . ' .scm-bg', $padding, $i[0], false); 
+	  			$html .= wei_media_query($i[2], $class . ' .scm-bg', $padding, $i[0], true); 
 	  		}
 	  	$html .= '</style>';
 
@@ -158,7 +182,7 @@
 
   /*
   	// Use
-		scm_img(32, 
+		wei_img(32, 
 			array(
 				'1500' => array(1500, 300, true),
 				'1200' => array(1200, 240, true),
@@ -170,8 +194,8 @@
 
   */
 
-	if(!function_exists('scm_bulk_generate')) {
-		function scm_bulk_generate($image_id, $sizes = array()) {
+	if(!function_exists('wei_bulk_generate')) {
+		function wei_bulk_generate($image_id, $sizes = array()) {
 			// // Resize Images
 			$styles = [];
 
@@ -183,7 +207,7 @@
 				$output_sizes = array();
 
 				foreach($sizes as $k => $s) {
-				  $output_sizes[$k]['dimensions'] = scm_opt_ratio(array($s[0], $s[1]), array($width, $height));
+				  $output_sizes[$k]['dimensions'] = wei_opt_ratio(array($s[0], $s[1]), array($width, $height));
 				  $output_sizes[$k]['crop'] = $s[2];
 				}
 				
@@ -192,7 +216,7 @@
 					$img = ''; $img_retina = '';
 					$resized = array();
 				  if($o['dimensions'][0] == $width && $o['dimensions'][1] == $height) { // Use image if it's already sized
-				    $resized['src'] = scm_get_attachment_image_url($image_id, 'full');
+				    $resized['src'] = wei_get_attachment_image_url($image_id, 'full');
 				  }
 				  else {
 				    $resized = fly_get_attachment_image_src($image_id, $o['dimensions'], $o['crop']);  
@@ -204,7 +228,7 @@
 				  $rWidth = $o['dimensions'][0] * 2;
 				  $rHeight = $o['dimensions'][1] * 2;
 					if($rWidth == $width && $rHeight == $height) { // Use image if it's already sized
-				    $resized['src'] = scm_get_attachment_image_url($image_id, 'full');
+				    $resized['src'] = wei_get_attachment_image_url($image_id, 'full');
 				  }
 				  else {
 				    $resized = fly_get_attachment_image_src($image_id, array($rWidth, $rHeight), $o['crop']);  
@@ -218,28 +242,28 @@
 		}
 	}
 	
-	if(!function_exists('scm_img')) {
-		function scm_img($image_id = 0, $sizes = array(), $return = false) {
+	if(!function_exists('wei_img')) {
+		function wei_img($image_id = 0, $sizes = array(), $return = false) {
 			if($image_id !== 0 && !empty($sizes)) {
-				$styles = scm_bulk_generate($image_id, $sizes);
+				$styles = wei_bulk_generate($image_id, $sizes);
 				
 				if($return) {
-					return scm_genereate_picture($image_id, $styles);
+					return wei_genereate_picture($image_id, $styles);
 				}
-				print scm_genereate_picture($image_id, $styles);
+				print wei_genereate_picture($image_id, $styles);
 			}
 		}
 	}
 
-	if(!function_exists('scm_bg')) {
-		function scm_bg($image_id = 0, $sizes = array(), $return = false) {
+	if(!function_exists('wei_bg')) {
+		function wei_bg($image_id = 0, $sizes = array(), $return = false) {
 			if($image_id !== 0 && !empty($sizes)) {
-				$styles = scm_bulk_generate($image_id, $sizes);
+				$styles = wei_bulk_generate($image_id, $sizes);
 
 				if($return) {
-					return print scm_genereate_background($image_id, $styles, $sizes);
+					return print wei_genereate_background($image_id, $styles, $sizes);
 				}
-				print scm_genereate_background($image_id, $styles, $sizes);
+				print wei_genereate_background($image_id, $styles, $sizes);
 			}
 		}
 	}
