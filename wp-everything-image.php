@@ -141,10 +141,13 @@
 					$html .= 'padding-bottom: ' . $padding . '%;';
 					$html .= 'background-repeat: no-repeat;';
 					$html .= 'background-size: cover;';
+					$html .= 'opacity: 0;';
+					$html .= 'transition: opacity 0.5s;';
 				$html .= '}';
 
 				$html .= ' .' . $class . '.loaded { ';
 					$html .= 'background-image: url(' . $image . ');';
+					$html .= 'opacity: 1;';
 				$html .= '}';			
 
 			if($min_width > 0) {
@@ -165,8 +168,8 @@
 	  	$class = 'wrapper-' . rand(1000000, 9999999) . '-' . $image_id;
 	  	
 	  	$html .= '<style>';
-	  		$last = array_key_last($images);
-	  		$html .= wei_media_query($images[$last][1], $class . ' .scm-bg', $padding, 0, false);
+				// $last = array_key_last($images);
+	  		$html .= wei_media_query($images[0][1], $class . ' .scm-bg', $padding, 0, false);
 	  		foreach($images as $k => $i) {
 	  			$padding = $sizes[$i[0]][1] / $sizes[$i[0]][0] * 100;
 
