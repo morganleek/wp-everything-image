@@ -20,13 +20,16 @@
 		define( 'WEI_PLUGIN_FILE', __FILE__ );
 	}
 
+	require_once 'inc/shim.php';
+
   // Scripts
 	function wei_enqueue_scripts() {
 		wp_enqueue_script('jquery');
 
-		wp_register_script('vanilla-lazyload', WEI_PLUGIN_FILE . '/bower_components/vanilla-lazyload/dist/lazyload.min.js', array(), '11.0.5');
+		$url = plugin_dir_url( __FILE__ );
+		wp_register_script('vanilla-lazyload', $url . 'bower_components/vanilla-lazyload/dist/lazyload.min.js', array(), '11.0.5');
 
-		wp_register_script('everything-image', WEI_PLUGIN_FILE . '/wp-everything-image.php', array('jquery', 'vanilla-lazyload'), '1.0.0');
+		wp_register_script('everything-image', $url .  'wp-everything-image.js', array('jquery', 'vanilla-lazyload'), '1.0.1');
 		wp_enqueue_script('everything-image');	
 	}
 	add_action( 'wp_enqueue_scripts', 'wei_enqueue_scripts' );
