@@ -167,8 +167,10 @@
 
 	  	$class = 'wrapper-' . rand(1000000, 9999999) . '-' . $image_id;
 	  	
-	  	$html .= '<style>';
+			$html .= '<style>';
+
 				// $last = array_key_last($images);
+				$padding = $sizes[$images[0][0]][0] / $sizes[$images[0][0]][1] * 100;
 	  		$html .= wei_media_query($images[0][1], $class . ' .scm-bg', $padding, 0, false);
 	  		foreach($images as $k => $i) {
 	  			$padding = $sizes[$i[0]][1] / $sizes[$i[0]][0] * 100;
@@ -179,7 +181,7 @@
 	  	$html .= '</style>';
 
 	  	$html .= '<div class="scm-bg-wrapper ' . $class . '"><div class="scm-bg lazy">';
-	  		$html .= '<img src="' . $images[$last][1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '" style="display: none;">';
+	  		$html .= '<div ><img style="display: none;" src="' . $images[0][1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '"></div>';
 	  	$html .= '</div></div>';
 
 	  	return $html;
@@ -216,7 +218,7 @@
 				  $output_sizes[$k]['dimensions'] = wei_opt_ratio(array($s[0], $s[1]), array($width, $height));
 				  $output_sizes[$k]['crop'] = $s[2];
 				}
-				
+
 				// Generate Images
 				foreach($output_sizes as $k => $o) {
 					$img = ''; $img_retina = '';
