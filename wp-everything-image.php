@@ -222,7 +222,7 @@
 					$img = ''; $img_retina = '';
 					$resized = array();
 					if($o['dimensions'][0] == $width && $o['dimensions'][1] == $height) { // Use image if it's already sized
-						$resized['src'] = wei_get_attachment_image_url($image_id, 'full');
+						$resized['src'] = wp_get_attachment_image_url($image_id, 'full');
 					}
 					else {
 						$resized = fly_get_attachment_image_src($image_id, $o['dimensions'], $o['crop']);  
@@ -234,7 +234,7 @@
 					$rWidth = $o['dimensions'][0] * 2;
 					$rHeight = $o['dimensions'][1] * 2;
 					if($rWidth == $width && $rHeight == $height) { // Use image if it's already sized
-						$resized['src'] = wei_get_attachment_image_url($image_id, 'full');
+						$resized['src'] = wp_get_attachment_image_url($image_id, 'full');
 					}
 					else {
 						$resized = fly_get_attachment_image_src($image_id, array($rWidth, $rHeight), $o['crop']);  
