@@ -159,21 +159,30 @@
 	}
 
   if(!function_exists('wei_genereate_background')) {
-	  function wei_genereate_background($image_id, $images, $sizes, $return = true) {
+	  function wei_genereate_background($image_id, $args = array()) {
+			$defaults = array(
+				'images' => array(), 
+				'sizes' => array(), 
+				// 'content' => '',
+				'return' => true
+			);
+
+			$_args = wp_parse_args($args, $default);
+
 	  	$html = '';
 
-	  	$attachment = wei_get_attachment($image_id);
-	  	$images = array_reverse($images);
+			$attachment = wei_get_attachment($image_id);
+	  	$images = array_reverse($_args['images']);
 
 	  	$class = 'wrapper-' . rand(1000000, 9999999) . '-' . $image_id;
 	  	
 			$html .= '<style>';
 
 				// $last = array_key_last($images);
-				$padding = $sizes[$images[0][0]][0] / $sizes[$images[0][0]][1] * 100;
+				$padding = $_args['sizes'][$images[0][0]][0] / $_args['sizes'][$images[0][0]][1] * 100;
 	  		$html .= wei_media_query($images[0][1], $class . ' .scm-bg', $padding, 0, false);
 	  		foreach($images as $k => $i) {
-	  			$padding = $sizes[$i[0]][1] / $sizes[$i[0]][0] * 100;
+	  			$padding = $_args['sizes'][$i[0]][1] / $_args['sizes'][$i[0]][0] * 100;
 
 	  			$html .= wei_media_query($i[1], $class . ' .scm-bg', $padding, $i[0], false); 
 	  			$html .= wei_media_query($i[2], $class . ' .scm-bg', $padding, $i[0], true); 
@@ -181,7 +190,10 @@
 	  	$html .= '</style>';
 
 	  	$html .= '<div class="scm-bg-wrapper ' . $class . '"><div class="scm-bg lazy">';
-	  		$html .= '<div ><img style="display: none;" src="' . $images[0][1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '"></div>';
+				$html .= '<div>';
+					$html .= '<img style="display: none;" src="' . $images[0][1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '">';
+					$html .= (!empty($_args['content'])) ? '<div class="content">' . $_args['content'] . '</div>' : '';
+				$html .= '</div>';
 	  	$html .= '</div></div>';
 
 	  	return $html;
@@ -250,28 +262,85 @@
 		}
 	}
 	
-	if(!function_exists('wei_img')) {
-		function wei_img($image_id = 0, $sizes = array(), $return = false) {
-			if($image_id !== 0 && !empty($sizes)) {
-				$styles = wei_bulk_generate($image_id, $sizes);
+	// if(!function_exists('wei_img')) {
+	// 	function wei_img($image_id = 0, $args = array()) {
+	// 		$defaults = array(
+	// 			'sizes' => array(), 
+	// 			'return' => false
+	// 		);
+
+	// 		$_args = wp_parse_args($args, $defaults);
+
+	// 		if($image_id !== 0 && !empty($_args['sizes'])) {
+	// 			$styles = wei_bulk_generate($image_id, $_args['sizes']);
 				
-				if($return) {
-					return wei_genereate_picture($image_id, $styles);
-				}
-				print wei_genereate_picture($image_id, $styles);
-			}
-		}
-	}
+	// 			if($return) {
+	// 				return wei_genereate_picture($image_id, $styles);
+	// 			}
+	// 			print wei_genereate_picture($image_id, $styles);
+	// 		}
+	// 	}
+	// }
 
-	if(!function_exists('wei_bg')) {
-		function wei_bg($image_id = 0, $sizes = array(), $return = false) {
-			if($image_id !== 0 && !empty($sizes)) {
-				$styles = wei_bulk_generate($image_id, $sizes);
+	// if(!function_exists('wei_bg')) {
+	// 	function wei_bg($image_id = 0, $args = array()) {
+	// 		$defaults = array(
+	// 			'sizes' => array(), 
+	// 			'content' => '',
+	// 			'return' => false
+	// 		);
 
-				if($return) {
-					return print wei_genereate_background($image_id, $styles, $sizes);
+	// 		$_args = wp_parse_args($args, $defaults);
+
+	// 		if($image_id !== 0 && !empty($_args['sizes'])) {
+	// 			$styles = wei_bulk_generate($image_id, $_args['sizes']);
+
+	// 			if($_args['return']) {
+	// 				return wei_genereate_background($image_id, array(
+	// 					'images' => $styles, 
+	// 					'sizes' => $_args['sizes'],
+	// 					'content' => $_args['content']
+	// 				));
+	// 			}
+	// 			print wei_genereate_background($image_id, array(
+	// 				'images' => $styles, 
+	// 				'sizes' => $_args['sizes'],
+	// 				'content' => $_args['content']
+	// 			));
+	// 		}
+	// 	}
+	// }
+
+	if(!function_exists('wei_image')) {
+		function wei_image($image_id = 0, $args = array()) {
+			$defaults = array(
+				'type' => 'background',
+				'sizes' => array(), 
+				'content' => '',
+				'return' => false
+			);
+
+			$_args = wp_parse_args($args, $defaults);
+
+			if($image_id !== 0 && !empty($_args['sizes'])) {
+				$styles = wei_bulk_generate($image_id, $_args['sizes']);
+
+				$html = '';
+				if($_args['type'] == 'background') {
+					$html = wei_genereate_background($image_id, array(
+						'images' => $styles, 
+						'sizes' => $_args['sizes'],
+						'content' => $_args['content']
+					));
 				}
-				print wei_genereate_background($image_id, $styles, $sizes);
+				else {
+					$html = wei_genereate_picture($image_id, $styles);
+				}
+
+				if($_args['return']) {
+					return $html;
+				}
+				print $html;
 			}
 		}
 	}
