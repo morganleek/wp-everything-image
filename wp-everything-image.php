@@ -145,10 +145,14 @@
 					$html .= 'transition: opacity 0.5s;';
 				$html .= '}';
 
+				$html .= ' .' . $class . '.loading { ';
+					$html .= 'background-image: url(' . $image . ');';
+				$html .= '}';			
+
 				$html .= ' .' . $class . '.loaded { ';
 					$html .= 'background-image: url(' . $image . ');';
 					$html .= 'opacity: 1;';
-				$html .= '}';			
+				$html .= '}';
 
 			if($min_width > 0) {
 				$html .= '}';
@@ -167,7 +171,7 @@
 				'return' => true
 			);
 
-			$_args = wp_parse_args($args, $default);
+			$_args = wp_parse_args($args, $defaults);
 
 			$html = '';
 
