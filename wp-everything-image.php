@@ -114,7 +114,7 @@
 				foreach($images as $i) {
 					$html .= wei_generate_picture_source($i[1], $i[2], $i[0]);	
 				}
-				$last = array_pop($images);
+				$last = array_shift($images);
 				$html .= '<img class="lazy" data-src="' . $last[1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '">'; // ' . get_stylesheet_directory() . '/img/loading.gif
 			$html .= '</picture>';	
 
