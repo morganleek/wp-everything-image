@@ -31,12 +31,17 @@
 
 		wp_register_script('everything-image', $url . 'wp-everything-image.js', array('jquery', 'vanilla-lazyload'), '1.0.1');
 		wp_enqueue_script('everything-image');	
+
+		wp_register_style('everything-image', $url . 'wp-everything-image.css', array(), '1.0.2');
+		wp_enqueue_style('everything-image');
 	}
 	add_action( 'wp_enqueue_scripts', 'wei_enqueue_scripts' );
 
 	// Add fly image resizer dependency
 
 	// Change parameters to single array to avoid future conflicts
+
+	$svg = '<svg id="clear" data-name="layer-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}"></svg>';
 
 	// Debug
 	if(!function_exists('_d')) {
@@ -78,7 +83,7 @@
 			$imageWidth = $optWidth;
 			$imageHeight = $optHeight;
 
-			if($width < $optWidth || $height < $optHeight) {
+			if($width < $optWidth || $height < $optHeight) {				
 				if($width / $ratio <= $height) {
 					$imageWidth = $width;
 					$imageHeight = $width / $ratio;
@@ -94,9 +99,20 @@
 	}
 
 	if(!function_exists('wei_generate_picture_source')) {
-		function wei_generate_picture_source($url, $url_retina, $min_width, $return = true) {
-			if(!empty($url) && !empty($url_retina) && !empty($min_width)) {
-				$return = '<source media="(min-width: ' . $min_width . 'px)" data-srcset="' . $url . ' 1x, ' . $url_retina . ' 2x">';
+		function wei_generate_picture_source($args) {
+			$defaults = array(
+				'url' => '',
+				'url_retina' => '',
+				'min_width' => 0,
+				'width' => 0,
+				'height' => 0,
+				'return' => true
+			);
+
+			$_args = wp_parse_args($args, $defaults);
+
+			if(!empty($_args['url']) && !empty($_args['url_retina']) && !empty($_args['min_width'])) {
+				$return = '<source media="(min-width: ' . $_args['min_width'] . 'px)" data-srcset="' . $_args['url'] . ' 1x, ' . $_args['url_retina'] . ' 2x" width="' . $_args['width'] . '" height="' . $_args['height'] . '">';
 				
 				if($return) {
 					return $return;
@@ -107,15 +123,34 @@
 	}
 
 	if(!function_exists('wei_genereate_picture')) {
-		function wei_genereate_picture($image_id, $images, $return = true) {
+		function wei_genereate_picture($image_id, $args = array()) {
+			$defaults = array(
+				'images' => array(),
+				'return' => true
+			);
+
+			$_args = wp_parse_args($args, $defaults);
+
 			$html = '';
 			$attachment = wei_get_attachment($image_id);
 			$html .= '<picture>';
-				foreach($images as $i) {
-					$html .= wei_generate_picture_source($i[1], $i[2], $i[0]);	
+				foreach($_args['images'] as $i) {
+					$html .= wei_generate_picture_source(array(
+						'url' => $i[1], 
+						'url_retina' => $i[2], 
+						'min_width' => $i[0],
+						'width' => $i[3],
+						'height' => $i[4]
+					));	
 				}
-				$last = array_shift($images);
-				$html .= '<img class="lazy" data-src="' . $last[1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '">'; // ' . get_stylesheet_directory() . '/img/loading.gif
+				$last = array_shift($_args['images']);
+
+				global $svg;
+				$svg_final = str_replace('{width}', $last[3], $svg);
+				$svg_final = str_replace('{height}', $last[4], $svg_final);
+				$svg_encoded = base64_encode($svg_final);
+
+				$html .= '<img class="lazy" src="data:image/svg+xml;base64,' . $svg_encoded . '" data-src="' . $last[1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '" width="' . $last[3] . '" height="' . $last[4] . '">';
 			$html .= '</picture>';	
 
 			return $html;
@@ -218,6 +253,7 @@
 
 				foreach($sizes as $k => $s) {
 					$output_sizes[$k]['dimensions'] = wei_opt_ratio(array($s[0], $s[1]), array($width, $height));
+					$output_sizes[$k]['dimensions_retina'] = wei_opt_ratio(array($s[0] * 2, $s[1] * 2), array($width, $height));
 					$output_sizes[$k]['crop'] = $s[2];
 				}
 
@@ -235,8 +271,8 @@
 
 					// Retina
 					$resized = array();
-					$rWidth = $o['dimensions'][0] * 2;
-					$rHeight = $o['dimensions'][1] * 2;
+					$rWidth = $o['dimensions_retina'][0];
+					$rHeight = $o['dimensions_retina'][1]; 
 					if($rWidth == $width && $rHeight == $height) { // Use image if it's already sized
 						$resized['src'] = wp_get_attachment_image_url($image_id, 'full');
 					}
@@ -245,7 +281,7 @@
 					}
 					$img_retina = $resized['src'];
 
-					$styles[] = array($k, $img, $img_retina);
+					$styles[] = array($k, $img, $img_retina, $o['dimensions'][0], $o['dimensions'][1]);
 				}
 			}
 			return $styles;
@@ -275,7 +311,9 @@
 					));
 				}
 				else {
-					$html = wei_genereate_picture($image_id, $styles);
+					$html = wei_genereate_picture($image_id, array(
+						'images' => $styles
+					));
 				}
 
 				if($_args['return']) {
