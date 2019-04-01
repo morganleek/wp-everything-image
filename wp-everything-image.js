@@ -1,7 +1,7 @@
 jQuery(window).on("load", function () {
   // Lazyload for unsupported background images
   var callback_reveal = function(element) {
-    if(jQuery(element).hasClass('scm-bg')) {
+    if(jQuery(element).hasClass('wei-background')) {
       jQuery(element).addClass('loaded');
     }
   };

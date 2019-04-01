@@ -44,8 +44,8 @@
 	$svg = '<svg id="clear" data-name="layer-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}"></svg>';
 
 	// Debug
-	if(!function_exists('_d')) {
-		function _d($obj, $return = false) {
+	if(!function_exists('_z')) {
+		function _z($obj, $return = false) {
 			if($return) {
 				return '<pre>' . print_r($obj, true) . '</pre>';
 			}
@@ -126,6 +126,7 @@
 		function wei_genereate_picture($image_id, $args = array()) {
 			$defaults = array(
 				'images' => array(),
+				'content' => '', 
 				'return' => true
 			);
 
@@ -133,25 +134,30 @@
 
 			$html = '';
 			$attachment = wei_get_attachment($image_id);
-			$html .= '<picture>';
-				foreach($_args['images'] as $i) {
-					$html .= wei_generate_picture_source(array(
-						'url' => $i[1], 
-						'url_retina' => $i[2], 
-						'min_width' => $i[0],
-						'width' => $i[3],
-						'height' => $i[4]
-					));	
+			$html .= '<div class="wei-picture-wrapper">';
+				$html .= '<picture>';
+					foreach($_args['images'] as $i) {
+						$html .= wei_generate_picture_source(array(
+							'url' => $i[1], 
+							'url_retina' => $i[2], 
+							'min_width' => $i[0],
+							'width' => $i[3],
+							'height' => $i[4]
+						));	
+					}
+					$last = array_shift($_args['images']);
+
+					global $svg;
+					$svg_final = str_replace('{width}', $last[3], $svg);
+					$svg_final = str_replace('{height}', $last[4], $svg_final);
+					$svg_encoded = base64_encode($svg_final);
+
+					$html .= '<img class="lazy" src="data:image/svg+xml;base64,' . $svg_encoded . '" data-src="' . $last[1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '" width="' . $last[3] . '" height="' . $last[4] . '">';
+				$html .= '</picture>';
+				if(!empty($_args['content'])) {
+					$html .= '<div class="content"><div class="content-align">' . $_args['content'] . '</div></div>';
 				}
-				$last = array_shift($_args['images']);
-
-				global $svg;
-				$svg_final = str_replace('{width}', $last[3], $svg);
-				$svg_final = str_replace('{height}', $last[4], $svg_final);
-				$svg_encoded = base64_encode($svg_final);
-
-				$html .= '<img class="lazy" src="data:image/svg+xml;base64,' . $svg_encoded . '" data-src="' . $last[1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '" width="' . $last[3] . '" height="' . $last[4] . '">';
-			$html .= '</picture>';	
+			$html .= '</div>';
 
 			return $html;
 		}
@@ -219,16 +225,16 @@
 
 				// $last = array_key_last($images);
 				$padding = $_args['sizes'][$images[0][0]][0] / $_args['sizes'][$images[0][0]][1] * 100;
-				$html .= wei_media_query($images[0][1], $class . ' .scm-bg', $padding, 0, false);
+				$html .= wei_media_query($images[0][1], $class . ' .wei-background', $padding, 0, false);
 				foreach($images as $k => $i) {
 					$padding = $_args['sizes'][$i[0]][1] / $_args['sizes'][$i[0]][0] * 100;
 
-					$html .= wei_media_query($i[1], $class . ' .scm-bg', $padding, $i[0], false); 
-					$html .= wei_media_query($i[2], $class . ' .scm-bg', $padding, $i[0], true); 
+					$html .= wei_media_query($i[1], $class . ' .wei-background', $padding, $i[0], false); 
+					$html .= wei_media_query($i[2], $class . ' .wei-background', $padding, $i[0], true); 
 				}
 			$html .= '</style>';
 
-			$html .= '<div class="scm-bg-wrapper ' . $class . '"><div class="scm-bg lazy">';
+			$html .= '<div class="wei-background-wrapper ' . $class . '"><div class="wei-background lazy">';
 				$html .= '<div>';
 					$html .= '<img style="display: none;" src="' . $images[0][1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '">';
 					$html .= (!empty($_args['content'])) ? '<div class="content">' . $_args['content'] . '</div>' : '';
@@ -312,7 +318,8 @@
 				}
 				else {
 					$html = wei_genereate_picture($image_id, array(
-						'images' => $styles
+						'images' => $styles,
+						'content' => $_args['content']
 					));
 				}
 
