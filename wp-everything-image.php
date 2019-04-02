@@ -256,7 +256,7 @@
 			// // Resize Images
 			$styles = [];
 
-			if($image_id !== 0 && !empty($sizes)) {
+			if($image_id !== 0 && $image_id !== NULL && !empty($sizes)) {
 				$meta = wp_get_attachment_metadata($image_id);
 				$width = $meta['width'];
 				$height = $meta['height'];
@@ -311,7 +311,7 @@
 
 			$_args = wp_parse_args($args, $defaults);
 
-			if($image_id !== 0 && !empty($_args['sizes'])) {
+			if($image_id !== 0 && $image_id !== NULL && !empty($_args['sizes'])) {
 				$styles = wei_bulk_generate($image_id, $_args['sizes']);
 
 				$html = '';
