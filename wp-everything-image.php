@@ -68,32 +68,38 @@
 		}
 	}
 
-
-	// Returns maximum size for image whilst maintaining an aspect ratio
+	// Return maximum sized ratio 
+	// If either value is zero if will automatically 
+	// choose the best non-cropped size
 	if(!function_exists('wei_opt_ratio')) {
 		function wei_opt_ratio($target, $dimensions) {
-			$width = $dimensions[0];
-			$height = $dimensions[1];
+			$imageWidth = $target[0];
+			$imageHeight = $target[1];
 
-			$optWidth = $target[0];
-			$optHeight = $target[1];
-
-			$ratio = $optWidth / $optHeight;
-
-			$imageWidth = $optWidth;
-			$imageHeight = $optHeight;
-
-			if($width < $optWidth || $height < $optHeight) {				
-				if($width / $ratio <= $height) {
-					$imageWidth = $width;
-					$imageHeight = $width / $ratio;
+			if($target[0] === 0 || $target[1] === 0) { // Automatic Width or Height
+				$ratio = $dimensions[0] / $dimensions[1];
+				if($target[0] === 0) {
+					$imageWidth = $target[1] * $ratio;
 				}
 				else {
-					$imageWidth = $height * $ratio;
-					$imageHeight = $height;
+					$imageHeight = $target[0] / $ratio;
 				}
 			}
-			
+			else { // Best sized dimensions
+				$ratio = $target[0] / $target[1];
+
+				if($dimensions[0] < $target[0] || $dimensions[1] < $target[1]) {				
+					if($dimensions[0] / $ratio <= $dimensions[1]) {
+						$imageWidth = $dimensions[0];
+						$imageHeight = $dimensions[0] / $ratio;
+					}
+					else {
+						$imageWidth = $dimensions[1] * $ratio;
+						$imageHeight = $dimensions[1];
+					}
+				}
+			}
+
 			return array(floor($imageWidth), floor($imageHeight));
 		}
 	}
