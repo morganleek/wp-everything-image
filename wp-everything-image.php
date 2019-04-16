@@ -228,12 +228,10 @@
 			$class = 'wrapper-' . rand(1000000, 9999999) . '-' . $image_id;
 			
 			$html .= '<style>';
-
-				// $last = array_key_last($images);
-				$padding = $_args['sizes'][$images[0][0]][0] / $_args['sizes'][$images[0][0]][1] * 100;
+				$padding = floor($images[0][4] / $images[0][3] * 100);
 				$html .= wei_media_query($images[0][1], $class . ' .wei-background', $padding, 0, false);
 				foreach($images as $k => $i) {
-					$padding = $_args['sizes'][$i[0]][1] / $_args['sizes'][$i[0]][0] * 100;
+					$padding = floor($i[4] / $i[3] * 100);
 
 					$html .= wei_media_query($i[1], $class . ' .wei-background', $padding, $i[0], false); 
 					$html .= wei_media_query($i[2], $class . ' .wei-background', $padding, $i[0], true); 
