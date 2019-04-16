@@ -219,31 +219,44 @@
 			);
 
 			$_args = wp_parse_args($args, $defaults);
-
 			$html = '';
 
 			$attachment = wei_get_attachment($image_id);
 			$images = array_reverse($_args['images']);
 
-			$class = 'wrapper-' . rand(1000000, 9999999) . '-' . $image_id;
+			$empty_class = false;
+
+			$class_wei = $_args['class'];
+			if(empty($_args['class'])) {
+				$class = 'wrapper-' . rand(1000000, 9999999) . '-' . $image_id;
+				$class_wei = $class . ' .wei-background';
+				$empty_class = true;
+			}
 			
 			$html .= '<style>';
 				$padding = floor($images[0][4] / $images[0][3] * 100);
-				$html .= wei_media_query($images[0][1], $class . ' .wei-background', $padding, 0, false);
+				$html .= wei_media_query($images[0][1], $class_wei, $padding, 0, false);
 				foreach($images as $k => $i) {
 					$padding = floor($i[4] / $i[3] * 100);
 
-					$html .= wei_media_query($i[1], $class . ' .wei-background', $padding, $i[0], false); 
-					$html .= wei_media_query($i[2], $class . ' .wei-background', $padding, $i[0], true); 
+					$html .= wei_media_query($i[1], $class_wei, $padding, $i[0], false); 
+					$html .= wei_media_query($i[2], $class_wei, $padding, $i[0], true); 
 				}
 			$html .= '</style>';
-
-			$html .= '<div class="wei-background-wrapper ' . $class . '"><div class="wei-background lazy">';
-				$html .= '<div>';
-					$html .= '<img style="display: none;" src="' . $images[0][1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '">';
-					$html .= (!empty($_args['content'])) ? '<div class="content">' . $_args['content'] . '</div>' : '';
-				$html .= '</div>';
-			$html .= '</div></div>';
+			
+			$inner = '<img style="display: none;" src="' . $images[0][1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '">';
+			$inner .= (!empty($_args['content'])) ? '<div class="content">' . $_args['content'] . '</div>' : '';
+			
+			if($empty_class) {
+				$html .= '<div class="wei-background-wrapper ' . $class . '"><div class="wei-background lazy">';
+					$html .= '<div>';
+						$html .= $inner;
+					$html .= '</div>';
+				$html .= '</div></div>';
+			}
+			else {
+				$html .= $inner;
+			}
 
 			return $html;
 		}
@@ -304,6 +317,7 @@
 				'type' => 'background',
 				'sizes' => array(), 
 				'content' => '',
+				'class' => '',
 				'return' => false
 			);
 
@@ -317,7 +331,8 @@
 					$html = wei_genereate_background($image_id, array(
 						'images' => $styles, 
 						'sizes' => $_args['sizes'],
-						'content' => $_args['content']
+						'content' => $_args['content'],
+						'class' => $_args['class']
 					));
 				}
 				else {
