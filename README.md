@@ -12,13 +12,14 @@ wei_image($attachment_id, $args);
 
 ```php
 wei_image($g['id'], array(
-    'type' => 'image',
+    'type' => 'image', // "image" for a <picture> or "background" for <div> with background image
+    'class' => 'override', // Use with "background". Overrides default div name. Requires you create the div
     'sizes' => array(
       '1500' => array(1500, 300, true),
       '1200' => array(1200, 240, true),
       '992' => array(992, 199, true),
       '765' => array(765, 400, true),
-      '375' => array(375, 375, true)
+      '1' => array(375, 375, true)
     ),
     'content' => '<h1>Some Content</h1>'
   )
