@@ -8,20 +8,47 @@ Generate both HTML5 Picture tags and background image divs with full responsiven
 [Fly Dynamic Image Resizer](https://wordpress.org/plugins/fly-dynamic-image-resizer/)
 
 ## Usage 
-wei_image($attachment_id, $args);
+```php
+<?php wei_image($attachment_id, $args = array()); ?>
+```
+
+## Parameters
+$attachment_id 
+
+$args
+...(array)(Optional)
+
+..* 'type'
+... (string) Either 'image' for HTML5 picture tag or 'background' for div element with background
+..* 'class'
+... (string) Override default div class name for 'background' type.
+..* 'sizes'
+... (array) Key value pair of 'min-width' breakpoint and array of (width, height, crop)
+..* 'content'
+... (string) HTML content to go over image
+..* 'return'
+... (bool) Whether to return or echo (default) the result
+
+## Example
 
 ```php
-wei_image($g['id'], array(
-    'type' => 'image', // "image" for a <picture> or "background" for <div> with background image
-    'class' => 'override', // Use with "background". Overrides default div name. Requires you create the div
-    'sizes' => array(
-      '1500' => array(1500, 300, true),
-      '1200' => array(1200, 240, true),
-      '992' => array(992, 199, true),
-      '765' => array(765, 400, true),
-      '1' => array(375, 375, true)
-    ),
-    'content' => '<h1>Some Content</h1>'
-  )
-);
+<?php 
+    $image = wei_image($image_id, 
+        array(
+        'type' => 'image',
+        'class' => 'override',
+        'sizes' => array(
+          '1500' => array(1500, 300, true),
+          '1200' => array(1200, 240, true),
+          '992' => array(992, 199, true),
+          '765' => array(765, 400, true),
+          '1' => array(375, 375, true)
+        ),
+        'content' => '<h1>Some Content</h1>',
+        'return' => true
+      )
+    );
+    
+    print $image;
+?>
 ```
