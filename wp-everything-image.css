@@ -12,6 +12,7 @@
 }
 .wei-picture-wrapper img {
   min-width: 100%;
+  height: auto;
 }
 .wei-picture-wrapper .content {
   position: absolute;
