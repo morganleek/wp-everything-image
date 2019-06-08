@@ -9,7 +9,7 @@ Generate both HTML5 Picture tags and background image divs with full responsiven
 
 ## Usage 
 ```php
-<?php wei_image($attachment_id, $args = array()); ?>
+wei_image($attachment_id, $args = array());
 ```
 
 ## Parameters
@@ -32,23 +32,24 @@ $args
 ## Example
 
 ```php
-<?php 
-$image = wei_image($image_id, 
-array(
-'type' => 'image',
-'class' => 'override',
-'sizes' => array(
-'1500' => array(1500, 300, true),
-'1200' => array(1200, 240, true),
-'992' => array(992, 199, true),
-'765' => array(765, 400, true),
-'1' => array(375, 375, true)
-),
-'content' => '<h1>Some Content</h1>',
-'return' => true
-)
+
+$image = wei_image(
+    $image_id, 
+    array(
+        'type' => 'image',
+        'class' => 'override',
+        'sizes' => array(
+            '1500' => array(1500, 300, true),
+            '1200' => array(1200, 240, true),
+            '992' => array(992, 199, true),
+            '765' => array(765, 400, true),
+            '1' => array(375, 375, true)
+        ),
+        'content' => '<h1>Some Content</h1>',
+        'return' => true
+    )
 );
 
 print $image;
-?>
+
 ```
