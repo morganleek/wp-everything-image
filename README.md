@@ -13,21 +13,21 @@ wei_image($attachment_id, $args = array());
 ```
 
 ## Parameters
-$attachment_id 
+**$attachment_id** 
 
-$args
-⋅⋅⋅(array)(Optional)
+**$args**
+    (array)(Optional)
 
-⋅⋅* 'type'
-⋅⋅⋅(string) Either 'image' for HTML5 picture tag or 'background' for div element with background
-⋅⋅* 'class'
-⋅⋅⋅ (string) Override default div class name for 'background' type.
-⋅⋅* 'sizes'
-⋅⋅⋅ (array) Key value pair of 'min-width' breakpoint and array of (width, height, crop)
-⋅⋅* 'content'
-⋅⋅⋅ (string) HTML content to go over image
-⋅⋅* 'return'
-⋅⋅⋅ (bool) Whether to return or echo (default) the result
+* **'type'**
+    (string) Either 'image' for HTML5 picture tag or 'background' for div element with background
+* **'class'**
+    (string) Override default div class name for 'background' type.
+* **'sizes'**
+    (array) Key value pair of 'min-width' breakpoint and array of (width, height, crop)
+* **'content'**
+    (string) HTML content to go over image
+* **'return'**
+    (bool) Whether to return or echo (default) the result
 
 ## Example
 
