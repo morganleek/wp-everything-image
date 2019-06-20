@@ -190,6 +190,7 @@
 					$html .= 'background-size: cover;';
 					$html .= 'opacity: 0;';
 					$html .= 'transition: opacity 0.5s;';
+					$html .= 'background-position: 50% 50%;';
 				$html .= '}';
 
 				$html .= ' .' . $class . '.loading { ';

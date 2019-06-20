@@ -21,7 +21,8 @@ wei_image($g['id'], array(
       '765' => array(765, 400, true),
       '1' => array(375, 375, true)
     ),
-    'content' => '<h1>Some Content</h1>'
+    'content' => '<h1>Some Content</h1>', // Optional
+    'return' => false // Return or echo
   )
 );
 ```
