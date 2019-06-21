@@ -24,7 +24,7 @@
 
 	// Scripts
 	function wei_enqueue_scripts() {
-		wp_enqueue_script('jquery');
+		// wp_enqueue_script('jquery');
 
 		$url = plugin_dir_url( __FILE__ );
 		wp_register_script('vanilla-lazyload', $url . 'bower_components/vanilla-lazyload/dist/lazyload.min.js', array(), '11.0.5');
