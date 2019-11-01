@@ -45,6 +45,7 @@ wei_image($g['id'], array(
     'content' => '<h1>Some Content</h1>', // Optional
     'return' => false // Return or echo
   )
+);
 
 $image = wei_image(
     $image_id, 
