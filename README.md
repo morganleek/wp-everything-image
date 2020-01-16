@@ -32,23 +32,9 @@ wei_image($attachment_id, $args = array());
 ## Example
 
 ```php
-wei_image($g['id'], array(
-    'type' => 'image', // "image" for a <picture> or "background" for <div> with background image
-    'class' => 'override', // Use with "background". Overrides default div name. Requires you create the div
-    'sizes' => array(
-      '1500' => array(1500, 300, true),
-      '1200' => array(1200, 240, true),
-      '992' => array(992, 199, true),
-      '765' => array(765, 400, true),
-      '1' => array(375, 375, true)
-    ),
-    'content' => '<h1>Some Content</h1>', // Optional
-    'return' => false // Return or echo
-  )
-);
-
+// Image as Picture tag
 $image = wei_image(
-    $image_id, 
+    $wp_image_id, 
     array(
         'type' => 'image',
         'class' => 'override',
@@ -59,11 +45,30 @@ $image = wei_image(
             '765' => array(765, 400, true),
             '1' => array(375, 375, true)
         ),
-        'content' => '<h1>Some Content</h1>',
+        'content' => '<h1>Some Content</h1>', // Optional
+        'alt' => 'Alt tag text', // Optional
         'return' => true
     )
 );
-
 print $image;
+
+// Image as background
+wei_image(
+    $wp_image_id, 
+    array(
+        'type' => 'image', // "image" for a <picture> or "background" for <div> with background image
+        'class' => 'override', // Use with "background". Overrides default div name. Requires you create the div
+        'sizes' => array(
+        '1500' => array(1500, 300, true),
+        '1200' => array(1200, 240, true),
+        '992' => array(992, 199, true),
+        '765' => array(765, 400, true),
+        '1' => array(375, 375, true)
+        ),
+        'content' => '<h1>Some Content</h1>', // Optional
+        'alt' => 'Alt tag text', // Optional
+        'return' => false // Return or echo
+    )
+);
 
 ```
