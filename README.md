@@ -32,7 +32,6 @@ wei_image($attachment_id, $args = array());
 ## Example
 
 ```php
-<<<<<<< HEAD
 wei_image($g['id'], array(
     'type' => 'image', // "image" for a <picture> or "background" for <div> with background image
     'class' => 'override', // Use with "background". Overrides default div name. Requires you create the div
@@ -46,7 +45,6 @@ wei_image($g['id'], array(
     'content' => '<h1>Some Content</h1>', // Optional
     'return' => false // Return or echo
   )
-=======
 
 $image = wei_image(
     $image_id, 
@@ -63,7 +61,6 @@ $image = wei_image(
         'content' => '<h1>Some Content</h1>',
         'return' => true
     )
->>>>>>> 9f475300403be7bd142e90fc12aa4218dc7596c3
 );
 
 print $image;

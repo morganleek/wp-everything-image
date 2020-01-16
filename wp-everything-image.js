@@ -1,5 +1,5 @@
-// Global for AJAX refresh
-var lazyLoadInstance, callback_reveal;
+// Global Lazy Objects
+var callback_reveal, lazyLoadInstance;
 
 jQuery(window).on("load", function () {
   // Lazyload for unsupported background images

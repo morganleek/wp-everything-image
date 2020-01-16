@@ -24,8 +24,6 @@
 
 	// Scripts
 	function wei_enqueue_scripts() {
-		// wp_enqueue_script('jquery');
-
 		$url = plugin_dir_url( __FILE__ );
 		wp_register_script('vanilla-lazyload', $url . 'bower_components/vanilla-lazyload/dist/lazyload.min.js', array(), '11.0.5');
 
@@ -133,6 +131,7 @@
 			$defaults = array(
 				'images' => array(),
 				'content' => '', 
+				'alt' => '',
 				'return' => true
 			);
 
@@ -158,7 +157,21 @@
 					$svg_final = str_replace('{height}', $last[4], $svg_final);
 					$svg_encoded = base64_encode($svg_final);
 
-					$html .= '<img class="lazy" src="data:image/svg+xml;base64,' . $svg_encoded . '" data-src="' . $last[1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '" width="' . $last[3] . '" height="' . $last[4] . '">';
+					$alts = array();
+					if(!empty($attachment['caption'])) {
+						$alts[] = $attachment['caption'];
+					}
+					if(!empty($attachment['alt'])) {
+						$alts[] = $attachment['alt'];
+					}
+					if(!empty($attachment['description'])) {
+						$alts[] = $attachment['description'];
+					} 
+					if(!empty($_args['alt'])) {
+						$alts[] = $_args['alt'];
+					}
+
+					$html .= '<img class="lazy" src="data:image/svg+xml;base64,' . $svg_encoded . '" data-src="' . $last[1] . '" alt="' . implode(' ', $alts) . '" width="' . $last[3] . '" height="' . $last[4] . '">';
 				$html .= '</picture>';
 				if(!empty($_args['content'])) {
 					$html .= '<div class="content"><div class="content-align">' . $_args['content'] . '</div></div>';
@@ -216,6 +229,7 @@
 				'images' => array(), 
 				'sizes' => array(), 
 				// 'content' => '',
+				'alt' => '',
 				'return' => true
 			);
 
@@ -244,8 +258,22 @@
 					$html .= wei_media_query($i[2], $class_wei, $padding, $i[0], true); 
 				}
 			$html .= '</style>';
+
+			$alts = array();
+			if(!empty($attachment['caption'])) {
+				$alts[] = $attachment['caption'];
+			}
+			if(!empty($attachment['alt'])) {
+				$alts[] = $attachment['alt'];
+			}
+			if(!empty($attachment['description'])) {
+				$alts[] = $attachment['description'];
+			} 
+			if(!empty($_args['alt'])) {
+				$alts[] = $_args['alt'];
+			}
 			
-			$inner = '<img style="display: none;" src="' . $images[0][1] . '" alt="' . $attachment['caption'] . ' ' . $attachment['alt'] . ' ' . $attachment['description'] . '">';
+			$inner = '<img style="display: none;" src="' . $images[0][1] . '" alt="' . implode(' ', $alts) . '">';
 			$inner .= (!empty($_args['content'])) ? '<div class="content">' . $_args['content'] . '</div>' : '';
 			
 			if($empty_class) {
@@ -319,6 +347,7 @@
 				'sizes' => array(), 
 				'content' => '',
 				'class' => '',
+				'alt' => '',
 				'return' => false
 			);
 
@@ -333,13 +362,15 @@
 						'images' => $styles, 
 						'sizes' => $_args['sizes'],
 						'content' => $_args['content'],
-						'class' => $_args['class']
+						'class' => $_args['class'],
+						'alt' => $_args['alt']
 					));
 				}
 				else {
 					$html = wei_genereate_picture($image_id, array(
 						'images' => $styles,
-						'content' => $_args['content']
+						'content' => $_args['content'],
+						'alt' => $_args['alt']
 					));
 				}
 
