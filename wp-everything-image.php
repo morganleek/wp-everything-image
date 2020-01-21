@@ -27,10 +27,10 @@
 		$url = plugin_dir_url( __FILE__ );
 		wp_register_script('vanilla-lazyload', $url . 'bower_components/vanilla-lazyload/dist/lazyload.min.js', array(), '11.0.5');
 
-		wp_register_script('everything-image', $url . 'wp-everything-image.js', array('jquery', 'vanilla-lazyload'), '1.0.1');
+		wp_register_script('everything-image', $url . 'wp-everything-image.js', array('jquery', 'vanilla-lazyload'), '1.0.5');
 		wp_enqueue_script('everything-image');	
 
-		wp_register_style('everything-image', $url . 'wp-everything-image.css', array(), '1.0.2');
+		wp_register_style('everything-image', $url . 'wp-everything-image.css', array(), '1.0.5');
 		wp_enqueue_style('everything-image');
 	}
 	add_action( 'wp_enqueue_scripts', 'wei_enqueue_scripts' );

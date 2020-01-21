@@ -6,6 +6,11 @@ jQuery(window).on("load", function () {
   callback_reveal = function(element) {
     if(jQuery(element).hasClass('wei-background')) {
       jQuery(element).addClass('loaded');
+      // Wait 1s and Remove Animation for Images 
+      // Stop Conflicts with Local CSS
+      setTimeout(function(element) {
+        jQuery(element).find('img.lazy').addClass('animation-complete');
+      }, 1000, element); 
     }
   };
 

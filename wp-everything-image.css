@@ -6,6 +6,10 @@
 .lazy.loaded {
   opacity: 1;
 }
+.lazy.animation-complete {
+  -webkit-transition: none;
+  transition: none;
+}
 
 .wei-picture-wrapper {
   position: relative;
