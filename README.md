@@ -7,6 +7,11 @@ Generate both HTML5 Picture tags and background image divs with full responsiven
 ## Requirements
 [Fly Dynamic Image Resizer](https://wordpress.org/plugins/fly-dynamic-image-resizer/)
 
+## Development
+```bash
+npm install
+```
+
 ## Usage 
 ```php
 wei_image($attachment_id, $args = array());

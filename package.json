@@ -1,0 +1,49 @@
+{
+  "name": "wp-everything-image",
+  "version": "1.0.0",
+  "description": "Function to quickly generate responsive images and background divs in Wordpress",
+  "main": "wp-everything-image.js",
+  "scripts": {
+    "start": "gulp",
+    "build": "gulp build --prod"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morganleek/wp-everything-image.git"
+  },
+  "keywords": [
+    "Wordpress",
+    "Responsive",
+    "Image",
+    "Background"
+  ],
+  "author": "Morgan Leek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/morganleek/wp-everything-image/issues"
+  },
+  "homepage": "https://github.com/morganleek/wp-everything-image#readme",
+  "dependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/register": "^7.8.3",
+    "autoprefixer": "^9.7.4",
+    "babel-loader": "^8.0.6",
+    "browser-sync": "^2.26.7",
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.2.0",
+    "gulp-if": "^3.0.0",
+    "gulp-imagemin": "^7.1.0",
+    "gulp-postcss": "^8.0.0",
+    "gulp-replace": "^1.0.0",
+    "gulp-sass": "^4.0.2",
+    "gulp-sourcemaps": "^2.6.5",
+    "gulp-wp-pot": "^2.3.6",
+    "gulp-zip": "^5.0.1",
+    "vinyl-named": "^1.1.0",
+    "webpack-stream": "^5.2.1",
+    "yargs": "^15.1.0",
+    "vanilla-lazyload": "^13.0.1"
+  }
+}
