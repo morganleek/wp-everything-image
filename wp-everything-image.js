@@ -4,13 +4,15 @@ var callback_reveal, lazyLoadInstance;
 jQuery(window).on("load", function () {
   // Lazyload for unsupported background images
   callback_reveal = function(element) {
+    // Background fallback support
     if(jQuery(element).hasClass('wei-background')) {
       jQuery(element).addClass('loaded');
-      // Wait 1s and Remove Animation for Images 
-      // Stop Conflicts with Local CSS
+    }
+    // Image finshed animating
+    if(jQuery(element).is('img')) {
       setTimeout(function(element) {
-        jQuery(element).find('img.lazy').addClass('animation-complete');
-      }, 1000, element); 
+        jQuery(element).addClass('animation-complete');
+      }, 501, element); 
     }
   };
 
