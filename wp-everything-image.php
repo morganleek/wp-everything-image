@@ -3,7 +3,7 @@
 	Plugin Name: Everything Image
 	Plugin URI: http://morganleek.me/wordpress-2/everything-image
 	Description: Generate sized, lazy loaded, responsive HTML images and CSS background divs
-	Version: 0.2.0
+	Version: 1.1.0
 	Author: Morgan Leek
 	Author URI: https://morganleek.me/
 	Text Domain: everything-image
@@ -15,6 +15,10 @@
 		exit; // Exit if accessed directly.
 	}
 
+	// Globals 
+	$PLUGIN_URL = plugin_dir_url( __FILE__ );
+	$SVG = '<svg id="clear" data-name="layer-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}"></svg>';
+
 	// Define WC_PLUGIN_FILE.
 	if ( ! defined( 'WEI_PLUGIN_FILE' ) ) {
 		define( 'WEI_PLUGIN_FILE', __FILE__ );
@@ -24,22 +28,17 @@
 
 	// Scripts
 	function wei_enqueue_scripts() {
-		$url = plugin_dir_url( __FILE__ );
-		wp_register_script('vanilla-lazyload', $url . 'bower_components/vanilla-lazyload/dist/lazyload.min.js', array(), '11.0.5');
+		global $PLUGIN_URL;
 
-		wp_register_script('everything-image', $url . 'wp-everything-image.js', array('jquery', 'vanilla-lazyload'), '1.0.8');
+		wp_register_script('everything-image', $PLUGIN_URL . 'dist/js/wp-everything-image.js', array('jquery'), '1.1.0');
 		wp_enqueue_script('everything-image');	
 
-		wp_register_style('everything-image', $url . 'wp-everything-image.css', array(), '1.0.6');
+		wp_register_style('everything-image', $PLUGIN_URL . 'dist/css/wp-everything-image.css', array(), '1.1.0');
 		wp_enqueue_style('everything-image');
 	}
 	add_action( 'wp_enqueue_scripts', 'wei_enqueue_scripts' );
 
 	// Add fly image resizer dependency
-
-	// Change parameters to single array to avoid future conflicts
-
-	$svg = '<svg id="clear" data-name="layer-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}"></svg>';
 
 	// Debug
 	if(!function_exists('_z')) {
@@ -152,8 +151,8 @@
 					}
 					$last = array_shift($_args['images']);
 
-					global $svg;
-					$svg_final = str_replace('{width}', $last[3], $svg);
+					global $SVG;
+					$svg_final = str_replace('{width}', $last[3], $SVG);
 					$svg_final = str_replace('{height}', $last[4], $svg_final);
 					$svg_encoded = base64_encode($svg_final);
 
