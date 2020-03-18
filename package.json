@@ -1,0 +1,28 @@
+{
+  "name": "wp-everything-image",
+  "version": "1.0.0",
+  "description": "Function to quickly generate responsive images and background divs in Wordpress",
+  "main": "wp-everything-image.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morganleek/wp-everything-image.git"
+  },
+  "keywords": [
+    "Wordpress",
+    "Responsive",
+    "Image",
+    "Background"
+  ],
+  "author": "Morgan Leek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/morganleek/wp-everything-image/issues"
+  },
+  "homepage": "https://github.com/morganleek/wp-everything-image#readme",
+  "dependencies": {
+    "vanilla-lazyload": "^13.0.1"
+  }
+}

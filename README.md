@@ -9,7 +9,7 @@ Generate both HTML5 Picture tags and background image divs with full responsiven
 
 ## Development
 ```bash
-npm init
+npm install
 ```
 
 ## Usage 
