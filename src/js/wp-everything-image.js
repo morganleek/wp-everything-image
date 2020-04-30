@@ -15,6 +15,9 @@ $(window).on("load", function () {
     if($(element).is('img')) {
       setTimeout(function(element) {
         $(element).addClass('animation-complete');
+        if(!$(element).hasClass('loaded')) {
+          $(element).addClass('loaded');
+        }
       }, 501, element); 
     }
   };
