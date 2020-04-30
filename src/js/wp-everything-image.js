@@ -16,7 +16,7 @@ $(window).on("load", function () {
       setTimeout(function(element) {
         $(element).addClass('animation-complete');
         if(!$(element).hasClass('loaded')) {
-          $(element).addClass('loaded');
+          $(element).addClass('loaded'); // Fallback
         }
       }, 501, element); 
     }
