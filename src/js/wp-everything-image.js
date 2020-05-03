@@ -11,13 +11,11 @@ $(window).on("load", function () {
     if($(element).hasClass('wei-background')) {
       $(element).addClass('loaded');
     }
+    
     // Image finshed animating
     if($(element).is('img')) {
       setTimeout(function(element) {
-        $(element).addClass('animation-complete');
-        if(!$(element).hasClass('loaded')) {
-          $(element).addClass('loaded'); // Fallback
-        }
+        $(element).addClass('lazy-reveal');
       }, 501, element); 
     }
   };
