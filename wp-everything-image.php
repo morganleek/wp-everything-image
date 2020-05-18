@@ -380,3 +380,24 @@
 			}
 		}
 	}
+
+	// AJAX
+
+	if(!function_exists('wei_image_js')) {
+		function wei_image_js() {
+			if(!isset($_POST['args']) || !isset($_POST['id'])) {
+				print 1;
+				wp_die();
+			}
+
+			$id = $_POST['id'];
+			$args = json_decode($_POST['args']);
+			___($args);
+			wp_die();
+
+			$args['return'] = false;
+			wei_image($id, $args);
+		}
+	}
+
+	add_action( 'wp_ajax_wei_image_js', 'wei_image_js' );
