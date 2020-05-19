@@ -115,7 +115,7 @@
 			$_args = wp_parse_args($args, $defaults);
 
 			if(!empty($_args['url']) && !empty($_args['url_retina']) && !empty($_args['min_width'])) {
-				$return = '<source media="(min-width: ' . $_args['min_width'] . 'px)" data-srcset="' . $_args['url'] . ' 1x, ' . $_args['url_retina'] . ' 2x" width="' . $_args['width'] . '" height="' . $_args['height'] . '">';
+				$return = '<source media="(min-width: ' . $_args['min_width'] . 'px)" srcset="' . wei_generate_svg($_args['width'], $_args['height']) . '" data-srcset="' . $_args['url'] . ' 1x, ' . $_args['url_retina'] . ' 2x" width="' . $_args['width'] . '" height="' . $_args['height'] . '">';
 				
 				if($return) {
 					return $return;
@@ -123,6 +123,16 @@
 				print $return;
 			}
 		} 
+	}
+
+	if(!function_exists('wei_generate_svg')) {
+		function wei_generate_svg($width = 0, $height = 0) {
+			global $SVG;
+			$svg_final = str_replace('{width}', $width, $SVG);
+			$svg_final = str_replace('{height}', $height, $svg_final);
+			$svg_encoded = base64_encode($svg_final);
+			return 'data:image/svg+xml;base64,' . $svg_encoded;
+		}
 	}
 
 	if(!function_exists('wei_genereate_picture')) {
@@ -151,11 +161,6 @@
 					}
 					$last = array_shift($_args['images']);
 
-					global $SVG;
-					$svg_final = str_replace('{width}', $last[3], $SVG);
-					$svg_final = str_replace('{height}', $last[4], $svg_final);
-					$svg_encoded = base64_encode($svg_final);
-
 					$alts = array();
 					if(!empty($attachment['caption'])) {
 						$alts[] = $attachment['caption'];
@@ -170,7 +175,7 @@
 						$alts[] = $_args['alt'];
 					}
 
-					$html .= '<img class="lazy" src="data:image/svg+xml;base64,' . $svg_encoded . '" data-src="' . $last[1] . '" alt="' . implode(' ', $alts) . '" width="' . $last[3] . '" height="' . $last[4] . '">';
+					$html .= '<img class="lazy" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" alt="' . implode(' ', $alts) . '" width="' . $last[3] . '" height="' . $last[4] . '">';
 				$html .= '</picture>';
 				if(!empty($_args['content'])) {
 					$html .= '<div class="content"><div class="content-align">' . $_args['content'] . '</div></div>';
