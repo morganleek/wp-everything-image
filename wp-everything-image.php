@@ -25,6 +25,7 @@
 	}
 
 	require_once 'inc/shim.php';
+	require_once 'inv/ajax.php';
 
 	// Scripts
 	function wei_enqueue_scripts() {
@@ -109,13 +110,14 @@
 				'min_width' => 0,
 				'width' => 0,
 				'height' => 0,
+				'svg_placeholder' => '',
 				'return' => true
 			);
 
 			$_args = wp_parse_args($args, $defaults);
 
 			if(!empty($_args['url']) && !empty($_args['url_retina']) && !empty($_args['min_width'])) {
-				$return = '<source media="(min-width: ' . $_args['min_width'] . 'px)" srcset="' . wei_generate_svg($_args['width'], $_args['height']) . '" data-srcset="' . $_args['url'] . ' 1x, ' . $_args['url_retina'] . ' 2x" width="' . $_args['width'] . '" height="' . $_args['height'] . '">';
+				$return = '<source media="(min-width: ' . $_args['min_width'] . 'px)" srcset="' . $_args['svg_placeholder'] . '" data-srcset="' . $_args['url'] . ' 1x, ' . $_args['url_retina'] . ' 2x" width="' . $_args['width'] . '" height="' . $_args['height'] . '">';
 				
 				if($return) {
 					return $return;
@@ -156,7 +158,8 @@
 							'url_retina' => $i[2], 
 							'min_width' => $i[0],
 							'width' => $i[3],
-							'height' => $i[4]
+							'height' => $i[4],
+							'svg_placeholder' => $i[5]
 						));	
 					}
 					$last = array_shift($_args['images']);
@@ -337,7 +340,14 @@
 					}
 					$img_retina = $resized['src'];
 
-					$styles[] = array($k, $img, $img_retina, $o['dimensions'][0], $o['dimensions'][1]);
+					$styles[] = array(
+						$k, 
+						$img, 
+						$img_retina, 
+						$o['dimensions'][0], 
+						$o['dimensions'][1],
+						wei_generate_svg( $o['dimensions'][0],  $o['dimensions'][1])
+					);
 				}
 			}
 			return $styles;
