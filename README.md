@@ -42,8 +42,8 @@ wp.ajax.send('wei_image', {
     "image_id": image_id,
     "sizes": { sizes }
   },
-  error: function() {},
-  success: function(r) { console.log(r); },
+  error: function(r) { /* Do something */ },
+  success: function(r) { /* Do something */ },
   type: 'POST'
 });
 ```
@@ -104,8 +104,8 @@ wp.ajax.send('wei_image', {
       "1": [350,200,true]
     }
   },
-  error: function(r) { // Do something },
-  success: function(r) { // Do something },
+  error: function(r) { /* Do something */ },
+  success: function(r) { /* Do something */ },
   type: 'POST'
 });
 ```
