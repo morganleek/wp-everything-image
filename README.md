@@ -38,7 +38,9 @@ wei_image($attachment_id, $args = array());
 ```js
 wp.ajax.send('wei_image', {
   data: {
-    "action":"wei_image","image_id":image_id,"sizes":{sizes}
+    "action": "wei_image",
+    "image_id": image_id,
+    "sizes": { sizes }
   },
   error: function() {},
   success: function(r) { console.log(r); },
