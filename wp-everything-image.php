@@ -25,7 +25,7 @@
 	}
 
 	require_once 'inc/shim.php';
-	require_once 'inv/ajax.php';
+	require_once 'inc/ajax.php';
 
 	// Scripts
 	function wei_enqueue_scripts() {
@@ -36,6 +36,8 @@
 
 		wp_register_style('everything-image', $PLUGIN_URL . 'dist/css/wp-everything-image.css', array(), '1.1.0');
 		wp_enqueue_style('everything-image');
+
+		wp_localize_script('everything-image', 'wei', array('ajax_url' => admin_url('admin-ajax.php')));
 	}
 	add_action( 'wp_enqueue_scripts', 'wei_enqueue_scripts' );
 
