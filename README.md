@@ -51,12 +51,12 @@ wp.ajax.send('wei_image', {
 ## Example
 
 ```php
-// Image as Picture tag
-$image = wei_image(
+// PHP Example
+
+$image = wei_image( // Image as Picture tag
   $wp_image_id, 
   array(
     'type' => 'image',
-    'class' => 'override',
     'sizes' => array(
       '1500' => array(1500, 300, true),
       '1200' => array(1200, 240, true),
@@ -71,8 +71,7 @@ $image = wei_image(
 );
 print $image;
 
-// Image as background
-wei_image(
+wei_image( // Image as background
   $wp_image_id, 
   array(
     'type' => 'image', // "image" for a <picture> or "background" for <div> with background image
@@ -93,6 +92,8 @@ wei_image(
 ```
 
 ```js
+// JS Example
+
 let image_id = 5;
 wp.ajax.send('wei_image', {
   data: {
