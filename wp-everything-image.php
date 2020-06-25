@@ -144,15 +144,22 @@
 			$defaults = array(
 				'images' => array(),
 				'content' => '', 
+				'class' => '',
 				'alt' => '',
 				'return' => true
 			);
 
 			$_args = wp_parse_args($args, $defaults);
 
+			// Append any classes
+			$classes = array('wei-picture-wrapper');
+			if(!empty($_args['class'])) {
+				$classes = array_merge($classes, explode(' ', $_args['class']));
+			}
+
 			$html = '';
 			$attachment = wei_get_attachment($image_id);
-			$html .= '<div class="wei-picture-wrapper">';
+			$html .= '<div class="' . implode(' ', $classes) . '">';
 				$html .= '<picture>';
 					foreach($_args['images'] as $i) {
 						$html .= wei_generate_picture_source(array(
@@ -386,6 +393,7 @@
 					$html = wei_genereate_picture($image_id, array(
 						'images' => $styles,
 						'content' => $_args['content'],
+						'class' => $_args['class'],
 						'alt' => $_args['alt']
 					));
 				}

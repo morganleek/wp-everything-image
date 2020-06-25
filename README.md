@@ -58,11 +58,11 @@ $image = wei_image( // Image as Picture tag
   array(
     'type' => 'image',
     'sizes' => array(
-      '1500' => array(1500, 300, true),
-      '1200' => array(1200, 240, true),
-      '992' => array(992, 199, true),
-      '765' => array(765, 400, true),
-      '1' => array(375, 375, true)
+      '1500' => array(1500, 300, true), // 1x 1500x300, 2x 3000x600 and crop
+      '1200' => array(1200, 240, true), // ...
+      '992' => array(992, 199, true), // ...
+      '768' => array(768, 400, true), // ...
+      '1' => array(375, 0, false) // Resize to 1x 300x{maintain-aspect} 2x 600x{maintain-aspect}
     ),
     'content' => '<h1>Some Content</h1>', // Optional
     'alt' => 'Alt tag text', // Optional
