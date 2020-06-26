@@ -57,6 +57,7 @@ $image = wei_image( // Image as Picture tag
   $wp_image_id, 
   array(
     'type' => 'image',
+    'class' => 'extra-classes' // Additional classes space seperated
     'sizes' => array(
       '1500' => array(1500, 300, true), // 1x 1500x300, 2x 3000x600 and crop
       '1200' => array(1200, 240, true), // ...
