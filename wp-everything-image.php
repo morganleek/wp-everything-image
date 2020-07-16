@@ -17,7 +17,7 @@
 
 	// Globals 
 	$PLUGIN_URL = plugin_dir_url( __FILE__ );
-	$SVG = '<svg id="clear" data-name="layer-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}"></svg>';
+	$SVG = '<svg id="placeholder" data-name="placeholder 1" xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}"></svg>';
 
 	// Define WC_PLUGIN_FILE.
 	if ( ! defined( 'WEI_PLUGIN_FILE' ) ) {
