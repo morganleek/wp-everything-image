@@ -171,7 +171,7 @@
 							'svg_placeholder' => $i[5]
 						));	
 					}
-					$last = array_shift($_args['images']);
+					$last = array_pop($_args['images']);
 
 					$alts = array();
 					if(!empty($attachment['caption'])) {
