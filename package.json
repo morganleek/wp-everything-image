@@ -41,9 +41,9 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-wp-pot": "^2.3.6",
     "gulp-zip": "^5.0.1",
+    "vanilla-lazyload": "^13.0.1",
     "vinyl-named": "^1.1.0",
     "webpack-stream": "^5.2.1",
-    "yargs": "^15.1.0",
-    "vanilla-lazyload": "^13.0.1"
+    "yargs": "^15.1.0"
   }
 }
