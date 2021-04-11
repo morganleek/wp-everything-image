@@ -336,6 +336,7 @@
 					else {
 						$resized = fly_get_attachment_image_src($image_id, $o['dimensions'], $o['crop']);  
 					}
+					
 					$img = $resized['src'];
 
 					// Retina

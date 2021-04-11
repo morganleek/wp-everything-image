@@ -17,7 +17,7 @@ npm install
 wei_image($attachment_id, $args = array());
 ```
 
-## Parameters
+### Parameters
 **$attachment_id** 
 
 **$args**
@@ -33,6 +33,29 @@ wei_image($attachment_id, $args = array());
   (string) HTML content to go over image
 * **'return'**
   (bool) Whether to return or echo (default) the result
+
+## Usage PHP (Gutenberg)
+Ability to override Wordpress' default image resizings based on their block location.
+
+```php
+// Enable
+add_filter( 'wei_activate_gutenberg_resize', '__return_true' );
+
+// Add size for parent block plus number of siblings. 3 Column Block is core/columns:3
+add_filter( 'wei_add_gutenberg_size', '_themename_wei_add_gutenberg_size', 10, 1 );
+
+function _themename_wei_add_gutenberg_size( $sizes ) {
+  $sizes['core/columns:3'] = array(
+    '1500' => array(500, 0, false), 
+    '1200' => array(400, 0, false), 
+    '992' => array(330, 0, false), 
+    '768' => array(256, 0, false), 
+    '1' => array(375, 0, false) 
+  );
+
+  return $sizes;
+}
+```
 
 ## Usage JS
 ```js
