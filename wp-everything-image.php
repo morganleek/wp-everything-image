@@ -26,7 +26,7 @@
 
 	require_once 'inc/shim.php';
 	require_once 'inc/ajax.php';
-	require_once 'inc/gutenberg.php';
+	// require_once 'inc/gutenberg.php';
 
 	// Scripts
 	function wei_enqueue_scripts() {
