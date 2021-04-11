@@ -48,12 +48,16 @@
 				}
 				// ___( $_args['parent'] . ':' . $_args['siblings'] . ',' . $block['blockName'] );
 				if( $block['blockName'] == 'core/image' && isset( $block['attrs']['id'] ) ) {
+
 					$classes = array( 'wp-block-image' );
 					if( isset( $block['attrs']['align'] ) ) {
 						$classes[] = 'align' . $block['attrs']['align'];
 					}
 					if( isset( $block['attrs']['sizeSlug'] ) ) {
 						$classes[] = 'size-' . $block['attrs']['sizeSlug'];
+					}
+					if( isset( $block['attrs']['className'] ) ) {
+						$classes[] = $block['attrs']['className'];
 					}
 
 					$sizes = wei_block_image_sizes( $block['id'], $_args['path'] );
