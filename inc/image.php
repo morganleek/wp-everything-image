@@ -147,27 +147,6 @@
 	// // 	return $content;
 	// }
 
-
-	function appendHTML( DOMNode $parent, $source ) {
-		$tmpDoc = new DOMDocument();
-		$tmpDoc->loadHTML($source);
-		foreach ($tmpDoc->getElementsByTagName('body')->item(0)->childNodes as $node) {
-			$node = $parent->ownerDocument->importNode($node, true);
-			$parent->appendChild($node);
-		}
-	}
-
-	function appendHTMLBefore( DOMNode $parent, $source, $child ) {
-		$tmpDoc = new DOMDocument();
-		$tmpDoc->loadHTML($source);
-		foreach ($tmpDoc->getElementsByTagName('body')->item(0)->childNodes as $node) {
-			$node = $parent->ownerDocument->importNode($node, true);
-			$parent->insertBefore($node, $child);
-		}
-	}
-
-	
-
 	// Return sizes to matched img tags
 	function wei_wp_image_filter_image_sizes( $content, $context = null ) {
 		// Matches - key is the attachment id, value is the size array
@@ -181,12 +160,11 @@
 			// XPath Checks
 			libxml_use_internal_errors( true ); // Supress invalid HTML messages
 			$doc = new DOMDocument();
-			$doc->loadHTML( '<fragment>' . $content . '</fragment>', LIBXML_HTML_NODEFDTD + LIBXML_HTML_NOIMPLIED ); // 
+			$doc->loadHTML( '<fragment>' . $content . '</fragment>', LIBXML_html_NODEFDTD + LIBXML_html_NOIMPLIED ); // 
 			$xpath = new DOMXpath( $doc );
 
 			// For each size xPath check again the images
 			foreach( $size_queries as $k => $v ) {
-				// ___( $k );
 				$images = $xpath->query( $k );
 				// Match exists
 				if( $images ) {
@@ -194,10 +172,6 @@
 					foreach( $images as $image ) {
 						$temp_filtered_image = '';
 						if ( preg_match( '/wp-image-([0-9]+)/i', $doc->saveHTML( $image ), $class_id ) ) {
-
-							// if( strpos( $doc->saveHTML( $image ), 'wei-is-processed' ) === 'false' ) {
-							// 	var_dump( strpos( $doc->saveHTML( $image ), 'wei-is-processed' ) );
-							// }
 							// Ensure not been updated already
 							$attachment_id = absint( $class_id[1] );
 							if ( $attachment_id ) {
@@ -220,27 +194,12 @@
 							}
 						}
 						if( !empty( $temp_filtered_image ) ) {
-							// Create fragment
-							// $picture =  new DOMDocument(); // $doc->createDocumentFragment();
-							// $picture->loadHTML( '<picture>' . $temp_filtered_image . '</picture>' );
-							// Replace existing image with new fragment
-							// var_dump( $picture->getElementsByTagName( 'picture' )->item( 0 )->parentNode );
-							// foreach( $picture->getElementsByTagName( 'picture' ) as $p ) {
-							// 	var_dump( $p );
-							// 	$image->parentNode->replaceChild( 
-							// 		$p, $image 
-							// 	);
-							// }
-							// $doc->appendChild( $picture );
-							appendHTMLBefore( 
+							wei_append_html_before( 
 								$image->parentNode, 
 								'<picture>' . $temp_filtered_image . '</picture>',
 								$image
 							);
 							$image->parentNode->removeChild( $image );
-							// $image->parentNode->replaceChild( 
-							// 	$picture->firstChild, $image 
-							// );
 						}
 					}
 				}

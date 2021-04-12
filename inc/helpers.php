@@ -22,3 +22,25 @@
 			return ___( $obk, $return );
 		}
 	}
+
+  if( !function_exists( 'wei_append_html' ) ) {
+    function wei_append_html( DOMNode $parent, $source ) {
+      $tmpDoc = new DOMDocument();
+      $tmpDoc->loadHTML($source);
+      foreach ($tmpDoc->getElementsByTagName('body')->item(0)->childNodes as $node) {
+        $node = $parent->ownerDocument->importNode($node, true);
+        $parent->appendChild($node);
+      }
+    }
+  }
+
+  if( !function_exists( 'wei_append_html_before' ) ) {
+    function wei_append_html_before( DOMNode $parent, $source, $child ) {
+      $tmpDoc = new DOMDocument();
+      $tmpDoc->loadHTML($source);
+      foreach ($tmpDoc->getElementsByTagName('body')->item(0)->childNodes as $node) {
+        $node = $parent->ownerDocument->importNode($node, true);
+        $parent->insertBefore($node, $child);
+      }
+    }
+  }

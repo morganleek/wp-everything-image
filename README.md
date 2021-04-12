@@ -35,26 +35,31 @@ wei_image($attachment_id, $args = array());
   (bool) Whether to return or echo (default) the result
 
 ## Usage PHP (Gutenberg)
-Ability to override Wordpress' default image resizings based on their block location.
+Ability to override Wordpress' default image resizings based on their block location. Use [XPath](https://devhints.io/xpath) syntax for to search for images.
 
 ```php
-// Enable
-add_filter( 'wei_activate_gutenberg_resize', '__return_true' );
+// Add filters with XPath path expressions and their responsive sizes
+add_filter( 'wei_wp_size_array', '_themename_wei_wp_size_array', 10, 1 );
 
-// Add size for parent block plus number of siblings. 3 Column Block is core/columns:3
-add_filter( 'wei_add_gutenberg_size', '_themename_wei_add_gutenberg_size', 10, 1 );
+function _themename_wei_wp_size_array( $size_queries = array() ) {
+		$size_queries = array(
+			'//div[contains(@class, "wp-block-media-text")]/figure/img' => array(
+				'1' => array(200, 0, false) 
+			),
+			'//div[@class="wp-block-column"]/figure/img' => array(
+				'992' => array(496, 0, false), 
+				'768' => array(384, 0, false), 
+				'1' => array(450, 0, false) 
+			),
+			'//img' => array(
+				'992' => array(992, 0, false), 
+				'768' => array(768, 0, false), 
+				'1' => array(450, 0, false) 
+			)
+		);
 
-function _themename_wei_add_gutenberg_size( $sizes ) {
-  $sizes['core/columns:3'] = array(
-    '1500' => array(500, 0, false), 
-    '1200' => array(400, 0, false), 
-    '992' => array(330, 0, false), 
-    '768' => array(256, 0, false), 
-    '1' => array(375, 0, false) 
-  );
-
-  return $sizes;
-}
+		return $size_queries;
+	}
 ```
 
 ## Usage JS
