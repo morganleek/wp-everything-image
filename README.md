@@ -42,24 +42,24 @@ Ability to override Wordpress' default image resizings based on their block loca
 add_filter( 'wei_wp_size_array', '_themename_wei_wp_size_array', 10, 1 );
 
 function _themename_wei_wp_size_array( $size_queries = array() ) {
-		$size_queries = array(
-			'//div[contains(@class, "wp-block-media-text")]/figure/img' => array(
-				'1' => array(200, 0, false) 
-			),
-			'//div[@class="wp-block-column"]/figure/img' => array(
-				'992' => array(496, 0, false), 
-				'768' => array(384, 0, false), 
-				'1' => array(450, 0, false) 
-			),
-			'//img' => array(
-				'992' => array(992, 0, false), 
-				'768' => array(768, 0, false), 
-				'1' => array(450, 0, false) 
-			)
-		);
+  $size_queries = array(
+    '//div[contains(@class, "wp-block-media-text")]/figure/img' => array(
+      '1' => array(200, 0, false) 
+    ),
+    '//div[@class="wp-block-column"]/figure/img' => array(
+      '992' => array(496, 0, false), 
+      '768' => array(384, 0, false), 
+      '1' => array(450, 0, false) 
+    ),
+    '//img' => array(
+      '992' => array(992, 0, false), 
+      '768' => array(768, 0, false), 
+      '1' => array(450, 0, false) 
+    )
+  );
 
-		return $size_queries;
-	}
+  return $size_queries;
+}
 ```
 
 ## Usage JS
