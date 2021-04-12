@@ -172,6 +172,11 @@
 					foreach( $images as $image ) {
 						$temp_filtered_image = '';
 						if ( preg_match( '/wp-image-([0-9]+)/i', $doc->saveHTML( $image ), $class_id ) ) {
+							// ___( $doc->saveHTML( $image ) );
+							$final_classes = '';
+							if( preg_match( '/class="(.+?)"/i', $doc->saveHTML( $image ), $classes ) ) {
+								$final_classes = preg_replace( '/wp-image-([0-9]+)/i', '', $classes[1] );
+							}
 							// Ensure not been updated already
 							$attachment_id = absint( $class_id[1] );
 							if ( $attachment_id ) {
@@ -189,7 +194,7 @@
 									));	
 								}
 								$last = array_pop( $src_sized );
-								$temp_filtered_image .= '<img class="lazy wei-is-processed" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" width="' . $last[3] . '" height="' . $last[4] . '">';
+								$temp_filtered_image .= '<img class="lazy wei-is-processed ' . $final_classes . '" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" width="' . $last[3] . '" height="' . $last[4] . '">';
 								
 							}
 						}
