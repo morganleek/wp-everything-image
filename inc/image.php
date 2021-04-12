@@ -194,7 +194,7 @@
 									));	
 								}
 								$last = array_pop( $src_sized );
-								$temp_filtered_image .= '<img class="lazy wei-is-processed ' . $final_classes . '" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" width="' . $last[3] . '" height="' . $last[4] . '">';
+								$temp_filtered_image .= '<img class="lazy wei-image ' . $final_classes . '" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" width="' . $last[3] . '" height="' . $last[4] . '">';
 								
 							}
 						}
