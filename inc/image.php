@@ -1,4 +1,7 @@
 <?php
+	require WEI__PLUGIN_DIR . 'vendor/autoload.php';
+	use PHPHtmlParser\Dom;
+	
 	// Override WP srcset image method with custom sizings
 
 	// Actions
@@ -12,10 +15,148 @@
 		// remove_filter( 'widget_text_content', 'wp_filter_content_tags' );
 
 		// Enable own img and iframe filters
-		add_filter( 'the_content', 'wei_wp_image_filter_image_sizes', 9, 1 );
-		add_filter( 'the_excerpt', 'wei_wp_image_filter_image_sizes', 9, 1 );
-		add_filter( 'widget_text_content', 'wei_wp_image_filter_image_sizes', 9, 1 );
+		// add_filter( 'the_content', 'wei_wp_image_filter_image_sizes', 9, 1 );
+		// add_filter( 'the_excerpt', 'wei_wp_image_filter_image_sizes', 9, 1 );
+		// add_filter( 'widget_text_content', 'wei_wp_image_filter_image_sizes', 9, 1 );
+
+		// Testing
+		add_filter( 'the_content', 'wei_test', 8, 1 );
 	}
+
+	function wei_test( $content ) {
+		// print WEI__PLUGIN_DIR . 'vendor/autoload.php';
+		$dom = new Dom();
+		$dom->loadStr( $content );
+
+		$finders = array(
+			'.wp-block-media-text__media img',
+			'.wp-block-columns img',
+			'img'
+		);
+
+		foreach( $finders as $find ) {
+			$found = $dom->find( $find );
+			// ___( $found->count() );
+			$i = 0;
+			foreach( $found as $img ) {
+				if( !$img->hasAttribute( "data-parsed" ) ) {
+					$i++;
+					$img->setAttribute( "data-parsed", "1" );
+				}
+			}
+			___( $i );
+		}
+
+
+
+		// ___( get_class_methods( $dom->find( '.wp-block-media-text__media img' )[0] ) );
+		// PHPHtmlParser\Dom\Node\HtmlNode
+		// Array
+		// (
+		// 		[0] => __construct
+		// 		[1] => setHtmlSpecialCharsDecode
+		// 		[2] => innerHtml
+		// 		[3] => innerText
+		// 		[4] => outerHtml
+		// 		[5] => text
+		// 		[6] => propagateEncoding
+		// 		[7] => hasChildren
+		// 		[8] => getChild
+		// 		[9] => getChildren
+		// 		[10] => countChildren
+		// 		[11] => addChild
+		// 		[12] => insertBefore
+		// 		[13] => insertAfter
+		// 		[14] => removeChild
+		// 		[15] => hasNextChild
+		// 		[16] => nextChild
+		// 		[17] => previousChild
+		// 		[18] => isChild
+		// 		[19] => replaceChild
+		// 		[20] => firstChild
+		// 		[21] => lastChild
+		// 		[22] => isDescendant
+		// 		[23] => setParent
+		// 		[24] => getIterator
+		// 		[25] => count
+		// 		[26] => __destruct
+		// 		[27] => __get
+		// 		[28] => __toString
+		// 		[29] => id
+		// 		[30] => getParent
+		// 		[31] => delete
+		// 		[32] => isAncestor
+		// 		[33] => getAncestor
+		// 		[34] => hasNextSibling
+		// 		[35] => nextSibling
+		// 		[36] => previousSibling
+		// 		[37] => getTag
+		// 		[38] => setTag
+		// 		[39] => getAttributes
+		// 		[40] => getAttribute
+		// 		[41] => hasAttribute
+		// 		[42] => setAttribute
+		// 		[43] => removeAttribute
+		// 		[44] => removeAllAttributes
+		// 		[45] => ancestorByTag
+		// 		[46] => find
+		// 		[47] => findById
+		// 		[48] => isTextNode
+		// )
+
+		// ___( $dom->find( '.wp-block-media-text__media img' )->count()  );
+		// PHPHtmlParser\Dom\Node\Collection
+		// Array
+		// (
+		// 		[0] => __call
+		// 		[1] => __get
+		// 		[2] => __toString
+		// 		[3] => count
+		// 		[4] => getIterator
+		// 		[5] => offsetSet
+		// 		[6] => offsetExists
+		// 		[7] => offsetUnset
+		// 		[8] => offsetGet
+		// 		[9] => toArray
+		// 		[10] => each
+		// )
+		
+		// $img = $dom->find( 'img' )[0]; // Returns Node\Collection
+		// echo $img->getAttribute( 'src' );
+		print $dom->__toString();
+		// ___( get_class_methods( new Dom() ) );
+		// Array
+		// (
+		// 		[0] => __construct
+		// 		[1] => __toString
+		// 		[2] => loadFromFile
+		// 		[3] => loadFromUrl
+		// 		[4] => loadStr
+		// 		[5] => setOptions
+		// 		[6] => find
+		// 		[7] => getElementById
+		// 		[8] => getElementsByTag
+		// 		[9] => getElementsByClass
+		// 		[10] => __get
+		// 		[11] => firstChild
+		// 		[12] => lastChild
+		// 		[13] => countChildren
+		// 		[14] => getChildren
+		// 		[15] => hasChildren
+		// )
+
+
+
+		// print 'hello';
+		// if( preg_match_all( '/<(img|iframe)\s[^>]+>/', $content, $matches, PREG_SET_ORDER ) ) {
+		// 	foreach( $matches as $match ) {
+		// 		____( $match );
+		// 	}
+		// }
+
+		die();
+	}
+
 
 	// Use same method to find and replace images
 	// function wei_wp_image_filter_content_tags( $content, $context = null ) {
@@ -159,10 +300,11 @@
 		if( !empty( $size_queries ) ) {
 			// XPath Checks
 			libxml_use_internal_errors( true ); // Supress invalid HTML messages
-			$doc = new DOMDocument();
-			$doc->loadHTML( '<fragment>' . $content . '</fragment>', LIBXML_html_NODEFDTD + LIBXML_html_NOIMPLIED ); // 
+			$doc = new DOMDocument( '1.0', 'utf-8' );
+			$doc->loadHTML( '<fragment>' . $content . '</fragment>', LIBXML_HTML_NODEFDTD | LIBXML_HTML_NOIMPLIED ); // 
 			$xpath = new DOMXpath( $doc );
 
+			print $doc->saveHTML();
 			// For each size xPath check again the images
 			foreach( $size_queries as $k => $v ) {
 				$images = $xpath->query( $k );

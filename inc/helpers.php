@@ -7,7 +7,7 @@
   }
 
   // Debug Object
-  if( !function_exists( '___', ) ) {
+  if( !function_exists( '___' ) ) {
     function ___( $obj, $return = false ) {
 			if( $return ) {
 				return '<pre>' . print_r( $obj, true ) . '</pre>';

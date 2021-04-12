@@ -15,6 +15,17 @@
 		exit; // Exit if accessed directly.
 	}
 
+	
+
+	// Plugin Data
+	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+	$plugin_data = get_plugin_data( __FILE__ );
+	
+	// Paths
+	define( 'WEI__PLUGIN_DIR', trailingslashit( plugin_dir_path( __FILE__ ) ) );
+	define( 'WEI__PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+	define( 'WEI__VERSION', $plugin_data['Version'] );
+
 	// Globals 
 	$PLUGIN_URL = plugin_dir_url( __FILE__ );
 	$SVG = '<svg id="placeholder" data-name="placeholder 1" xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}"></svg>';
@@ -32,12 +43,12 @@
 
 	// Scripts
 	function wei_enqueue_scripts() {
-		global $PLUGIN_URL;
+		// global $PLUGIN_URL;
 
-		wp_register_script('everything-image', $PLUGIN_URL . 'dist/js/wp-everything-image.js', array('jquery'), '1.1.0');
+		wp_register_script('everything-image', WEI__PLUGIN_URL . 'dist/js/wp-everything-image.js', array('jquery'), '1.1.0');
 		wp_enqueue_script('everything-image');	
 
-		wp_register_style('everything-image', $PLUGIN_URL . 'dist/css/wp-everything-image.css', array(), '1.1.0');
+		wp_register_style('everything-image', WEI__PLUGIN_URL . 'dist/css/wp-everything-image.css', array(), '1.1.0');
 		wp_enqueue_style('everything-image');
 
 		wp_localize_script('everything-image', 'wei', array('ajax_url' => admin_url('admin-ajax.php')));

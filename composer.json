@@ -1,0 +1,13 @@
+{
+    "name": "morganleek/wp-everything-image",
+    "type": "wordpress-plugin",
+    "authors": [
+        {
+            "name": "Morgan Leek",
+            "email": "morganleek@gmail.com"
+        }
+    ],
+    "require": {
+        "paquettg/php-html-parser": "^3.1"
+    }
+}
