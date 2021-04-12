@@ -24,9 +24,11 @@
 		define( 'WEI_PLUGIN_FILE', __FILE__ );
 	}
 
+	// Includes
+	require_once 'inc/helpers.php';
 	require_once 'inc/shim.php';
 	require_once 'inc/ajax.php';
-	// require_once 'inc/gutenberg.php';
+	require_once 'inc/image.php';
 
 	// Scripts
 	function wei_enqueue_scripts() {
@@ -43,16 +45,6 @@
 	add_action( 'wp_enqueue_scripts', 'wei_enqueue_scripts' );
 
 	// Add fly image resizer dependency
-
-	// Debug
-	if(!function_exists('_z')) {
-		function _z($obj, $return = false) {
-			if($return) {
-				return '<pre>' . print_r($obj, true) . '</pre>';
-			}
-			print '<pre>' . print_r($obj, true) . '</pre>';	
-		}
-	}
 
 	if(!function_exists('wei_get_attachment')) {
 		function wei_get_attachment( $attachment_id ) {
