@@ -3,7 +3,7 @@
 	Plugin Name: Everything Image
 	Plugin URI: http://morganleek.me/wordpress-2/everything-image
 	Description: Generate sized, lazy loaded, responsive HTML images and CSS background divs
-	Version: 1.2.0
+	Version: 1.3.0
 	Author: Morgan Leek
 	Author URI: https://morganleek.me/
 	Text Domain: everything-image
@@ -14,8 +14,6 @@
 	if ( ! defined( 'ABSPATH' ) ) {
 		exit; // Exit if accessed directly.
 	}
-
-	
 
 	// Plugin Data
 	require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
