@@ -64,7 +64,7 @@
 										));	
 									}
 									$last = array_pop( $srcsets );
-									$image_html .= '<img class="lazy wei-image ' . $final_classes . '" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" data-parsed="1" width="' . $last[3] . '" height="' . $last[4] . '">';
+									$image_html .= '<img class="lazy wei-image ' . $migrate_classes . '" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" data-parsed="1" width="' . $last[3] . '" height="' . $last[4] . '">';
 								$image_html .= '</picture>';
 								// Create DOM and then grab picture elemnt
 								$image_dom = new Dom();
