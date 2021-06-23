@@ -336,6 +336,9 @@
 					}
 					else {
 						$resized = fly_get_attachment_image_src($image_id, $o['dimensions'], $o['crop']);  
+						if( empty( $resized ) ) {
+							$resized['src'] = wp_get_attachment_image_url($image_id, 'full');
+						}
 					}
 					
 					$img = $resized['src'];
@@ -349,6 +352,9 @@
 					}
 					else {
 						$resized = fly_get_attachment_image_src($image_id, array($rWidth, $rHeight), $o['crop']);  
+						if( empty( $resized ) ) {
+							$resized['src'] = wp_get_attachment_image_url($image_id, 'full');
+						}
 					}
 					$img_retina = $resized['src'];
 
