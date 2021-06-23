@@ -23,27 +23,27 @@
     "url": "https://github.com/morganleek/wp-everything-image/issues"
   },
   "homepage": "https://github.com/morganleek/wp-everything-image#readme",
-  "dependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/preset-env": "^7.8.4",
-    "@babel/register": "^7.8.3",
-    "autoprefixer": "^9.7.4",
-    "babel-loader": "^8.0.6",
-    "browser-sync": "^2.26.7",
-    "del": "^5.1.0",
+  "devDependencies": {
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.1",
+    "@babel/register": "^7.13.16",
+    "autoprefixer": "^10.2.5",
+    "babel-loader": "^8.2.2",
+    "browser-sync": "^2.26.14",
+    "del": "^6.0.0",
     "gulp": "^4.0.2",
-    "gulp-clean-css": "^4.2.0",
+    "gulp-babel": "^8.0.0",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-dart-sass": "^1.0.2",
     "gulp-if": "^3.0.0",
-    "gulp-imagemin": "^7.1.0",
-    "gulp-postcss": "^8.0.0",
-    "gulp-replace": "^1.0.0",
-    "gulp-sass": "^4.0.2",
-    "gulp-sourcemaps": "^2.6.5",
-    "gulp-wp-pot": "^2.3.6",
-    "gulp-zip": "^5.0.1",
-    "vanilla-lazyload": "^13.0.1",
+    "gulp-postcss": "^9.0.0",
+    "gulp-replace": "^1.1.3",
+    "gulp-sourcemaps": "^3.0.0",
     "vinyl-named": "^1.1.0",
-    "webpack-stream": "^5.2.1",
-    "yargs": "^15.1.0"
+    "webpack-stream": "^6.1.2",
+    "yargs": "^17.0.1"
+  },
+  "dependencies": {
+    "vanilla-lazyload": "^13.0.1"
   }
 }
