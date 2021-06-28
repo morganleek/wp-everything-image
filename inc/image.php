@@ -26,7 +26,7 @@
 		$dom->loadStr( $content );
 
 		// Get sizes via filter
-		$size_queries = apply_filters( 'wei_wp_size_array', $size_queries );
+		$size_queries = apply_filters( 'wei_wp_size_array', array() );
 		if( !empty( $size_queries ) ) {
 			foreach( $size_queries as $selector => $size ) {
 				// Search DOM by selectors
@@ -44,7 +44,18 @@
 							if( preg_match( '/class="(.+?)"/i', $image->__toString(), $classes ) ) {
 								$migrate_classes = preg_replace( '/wp-image-([0-9]+)/i', '', $classes[1] );
 							}
+							
+							// Has inline width or height set
+							// $inline_width = ''; $inline_height = '';
+							// if( $image->getAttribute( 'width' ) || $image->getAttribute( 'height' ) ) {
+							// 	$inline_width = $image->getAttribute( 'width' ) ?: 0;
+							// 	$inline_height = $image->getAttribute( 'height' ) ?: 0;
 
+							// 	$size = array(
+							// 		'1' => array($inline_width, $inline_height, false) 
+							// 	);
+							// }
+							
 							// Build <picture> tag
 							if ( $attachment_id ) {
 								// Update
@@ -64,7 +75,9 @@
 										));	
 									}
 									$last = array_pop( $srcsets );
-									$image_html .= '<img class="lazy wei-image ' . $migrate_classes . '" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" data-parsed="1" width="' . $last[3] . '" height="' . $last[4] . '">';
+									$width = $last[3];
+									$height = $last[4];
+									$image_html .= '<img class="lazy wei-image ' . $migrate_classes . '" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" data-parsed="1" width="' . $width . '" height="' . $height . '">';
 								$image_html .= '</picture>';
 								// Create DOM and then grab picture elemnt
 								$image_dom = new Dom();
