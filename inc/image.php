@@ -32,34 +32,38 @@
 				// Search DOM by selectors
 				$images = $dom->find( $selector );
 				
-				foreach( $images as $image ) {
+				// Each image found
+				foreach( $images as $k => $image ) {
 					if( !$image->hasAttribute( "data-parsed" ) ) {
 						// Grab attachment id
 						if ( preg_match( '/wp-image-([0-9]+)/i', $image->__toString(), $class_id ) ) {
 							// Grab classes no the attachemnt id
 							$attachment_id = absint( $class_id[1] );
 
-							// Migrate existing classes
-							$migrate_classes = '';
-							if( preg_match( '/class="(.+?)"/i', $image->__toString(), $classes ) ) {
-								$migrate_classes = preg_replace( '/wp-image-([0-9]+)/i', '', $classes[1] );
-							}
-							
-							// Has inline width or height set
-							// $inline_width = ''; $inline_height = '';
-							// if( $image->getAttribute( 'width' ) || $image->getAttribute( 'height' ) ) {
-							// 	$inline_width = $image->getAttribute( 'width' ) ?: 0;
-							// 	$inline_height = $image->getAttribute( 'height' ) ?: 0;
-
-							// 	$size = array(
-							// 		'1' => array($inline_width, $inline_height, false) 
-							// 	);
-							// }
-							
 							// Build <picture> tag
 							if ( $attachment_id ) {
-								// Update
-								$srcsets = wei_bulk_generate( $attachment_id, $size );
+								// Migrate existing classes
+								$migrate_classes = '';
+								if( preg_match( '/class="(.+?)"/i', $image->__toString(), $classes ) ) {
+									$migrate_classes = preg_replace( '/wp-image-([0-9]+)/i', '', $classes[1] );
+								}
+								
+								// Build srcset
+								if( $image->getAttribute( 'width' ) || $image->getAttribute( 'height' ) ) {
+									// Has inline height or width
+									$alt_size = array(
+										'1' => array(
+											$image->getAttribute( 'width' ) ?: 0, 
+											$image->getAttribute( 'height' ) ?: 0, 
+											false) 
+									);
+									$srcsets = wei_bulk_generate( $attachment_id, $alt_size );
+								}
+								else {
+									// No inline height or width use user defined
+									$srcsets = wei_bulk_generate( $attachment_id, $size );
+								}
+							
 								// Image HTML
 								$image_html = '';
 								// Get srcset data
@@ -77,7 +81,7 @@
 									$last = array_pop( $srcsets );
 									$width = $last[3];
 									$height = $last[4];
-									$image_html .= '<img class="lazy wei-image ' . $migrate_classes . '" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" data-parsed="1" width="' . $width . '" height="' . $height . '">';
+									$image_html .= '<img class="lazy wei-image ' . $migrate_classes . '" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" data-parsed="1" width="' . $width . '" height="' . $height . '" data-item-processed="' . $k . '">';
 								$image_html .= '</picture>';
 								// Create DOM and then grab picture elemnt
 								$image_dom = new Dom();
