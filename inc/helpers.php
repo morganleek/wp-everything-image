@@ -19,7 +19,7 @@
   // Debug Object Alias
 	if( !function_exists( '_z' ) ) {
 		function _z( $obj, $return = false ) {
-			return ___( $obk, $return );
+			return ___( $obj, $return );
 		}
 	}
 
