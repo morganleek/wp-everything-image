@@ -39,55 +39,66 @@
 						if ( preg_match( '/wp-image-([0-9]+)/i', $image->__toString(), $class_id ) ) {
 							// Grab classes no the attachemnt id
 							$attachment_id = absint( $class_id[1] );
+							// Check mime type is valid for resizing
+							$meta_data = wp_get_attachment_metadata( $attachment_id );
+							if( !empty( $meta_data['sizes'] ) ) {
+								$sample_size = array_pop( $meta_data['sizes'] );
+								$mime_type = $sample_size['mime-type'];
+								// Don't run for SVG 
+								// Add addtional filtering here 
+								if( $mime_type != "image/svg+xml" ) {
+									// Build <picture> tag
+									if ( $attachment_id ) {
+										// Migrate existing classes
+										$migrate_classes = '';
+										if( preg_match( '/class="(.+?)"/i', $image->__toString(), $classes ) ) {
+											$migrate_classes = preg_replace( '/wp-image-([0-9]+)/i', '', $classes[1] );
+										}
+										
+										// Build srcset
+										if( $image->getAttribute( 'width' ) || $image->getAttribute( 'height' ) ) {
+											// Has inline height or width
+											$alt_size = array(
+												'1' => array(
+													$image->getAttribute( 'width' ) ?: 0, 
+													$image->getAttribute( 'height' ) ?: 0, 
+													false) 
+											);
+											$srcsets = wei_bulk_generate( $attachment_id, $alt_size );
+										}
+										else {
+											// No inline height or width use user defined
+											$srcsets = wei_bulk_generate( $attachment_id, $size );
+										}
 
-							// Build <picture> tag
-							if ( $attachment_id ) {
-								// Migrate existing classes
-								$migrate_classes = '';
-								if( preg_match( '/class="(.+?)"/i', $image->__toString(), $classes ) ) {
-									$migrate_classes = preg_replace( '/wp-image-([0-9]+)/i', '', $classes[1] );
-								}
-								
-								// Build srcset
-								if( $image->getAttribute( 'width' ) || $image->getAttribute( 'height' ) ) {
-									// Has inline height or width
-									$alt_size = array(
-										'1' => array(
-											$image->getAttribute( 'width' ) ?: 0, 
-											$image->getAttribute( 'height' ) ?: 0, 
-											false) 
-									);
-									$srcsets = wei_bulk_generate( $attachment_id, $alt_size );
-								}
-								else {
-									// No inline height or width use user defined
-									$srcsets = wei_bulk_generate( $attachment_id, $size );
-								}
-							
-								// Image HTML
-								$image_html = '';
-								// Get srcset data
-								$image_html .= '<picture>';
-									foreach($srcsets as $srcset) {
-										$image_html .= wei_generate_picture_source(array(
-											'url' => $srcset[1], 
-											'url_retina' => $srcset[2], 
-											'min_width' => $srcset[0],
-											'width' => $srcset[3],
-											'height' => $srcset[4],
-											'svg_placeholder' => $srcset[5]
-										));	
+										// Image HTML
+										$image_html = '';
+										// Get srcset data
+										$image_html .= '<picture>';
+											foreach($srcsets as $srcset) {
+												$image_html .= wei_generate_picture_source(array(
+													'url' => $srcset[1], 
+													'url_retina' => $srcset[2], 
+													'min_width' => $srcset[0],
+													'width' => $srcset[3],
+													'height' => $srcset[4],
+													'svg_placeholder' => $srcset[5]
+												));	
+											}
+											$last = array_pop( $srcsets );
+											$width = $last[3];
+											$height = $last[4];
+											$image_html .= '<img class="lazy wei-image ' . $migrate_classes . '" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" data-parsed="1" width="' . $width . '" height="' . $height . '" data-item-processed="' . $k . '">';
+										$image_html .= '</picture>';
+										// Create DOM and then grab picture elemnt
+										$image_dom = new Dom();
+										$image_dom->loadStr( $image_html );
+										$image->getParent()->replaceChild( $image->id(), $image_dom->find('picture')[0] );
 									}
-									$last = array_pop( $srcsets );
-									$width = $last[3];
-									$height = $last[4];
-									$image_html .= '<img class="lazy wei-image ' . $migrate_classes . '" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" data-parsed="1" width="' . $width . '" height="' . $height . '" data-item-processed="' . $k . '">';
-								$image_html .= '</picture>';
-								// Create DOM and then grab picture elemnt
-								$image_dom = new Dom();
-								$image_dom->loadStr( $image_html );
-								$image->getParent()->replaceChild( $image->id(), $image_dom->find('picture')[0] );
-							}
+								}
+							} 
+							
+							
 						}
 					}
 				}
