@@ -1,28 +1,31 @@
-import $ from 'jquery';
 import LazyLoad from "vanilla-lazyload";
 
 // Global Lazy Objects
 var callback_reveal, lazyLoadInstance;
 
-$(window).on("load", function () {
+window.addEventListener( 'load', () => {
   // Lazyload for unsupported background images
-  callback_reveal = function(element) {
+  callback_reveal = function( image ) {
+    // Fire event for customization
+    const event = new Event( 'EverythingImage::ImageLoaded' );
+    image.dispatchEvent( event );
+
     // Background fallback support
-    if($(element).hasClass('wei-background')) {
-      $(element).addClass('loaded');
+    if( image.classList.contains( 'wei-background' ) ) {
+      image.classList.add( 'loaded' );
     }
     
-    // Image finshed animating
-    if($(element).is('img')) {
-      setTimeout(function(element) {
-        $(element).addClass('lazy-reveal');
-      }, 501, element); 
+    //  Image finshed animating
+    if( image.tagName.toUpperCase() == "IMG" ) {
+      setTimeout( function( image ) {
+        image.classList.add( 'lazy-reveal' );
+      }, 501, image ); 
     }
   };
 
-  lazyLoadInstance = new LazyLoad({
+  lazyLoadInstance = new LazyLoad( {
     elements_selector: ".lazy",
     callback_reveal: callback_reveal // For background images
-  });
-});
+  } );
+} );
 

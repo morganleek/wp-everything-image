@@ -80,6 +80,14 @@ add_filter( 'wei_wp_size_array', '_themename_wei_wp_size_array', 10, 1 );
   }
 ```
 
+## Basic Events
+```
+const img = document.querySelector( 'img' );
+img.addEventListener( 'EverythingImage::ImageLoaded', function( e ) { 
+  console.log( e );
+} );
+```
+
 ## Usage JS
 ```js
 wp.ajax.send('wei_image', {
