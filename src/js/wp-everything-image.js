@@ -1,13 +1,10 @@
 import LazyLoad from "vanilla-lazyload";
 
-// Global Lazy Objects
-var callback_reveal, lazyLoadInstance;
-
 window.addEventListener( 'load', () => {
   // Lazyload for unsupported background images
-  callback_reveal = function( image ) {
+  const callback_reveal = ( image ) => {
     // Fire event for customization
-    const event = new Event( 'EverythingImage::ImageLoaded' );
+    const event = new Event( 'EverythingImage::ImageRevealed' );
     image.dispatchEvent( event );
 
     // Background fallback support
@@ -23,9 +20,15 @@ window.addEventListener( 'load', () => {
     }
   };
 
-  lazyLoadInstance = new LazyLoad( {
+  const callback_loaded = ( image ) => {
+    const event = new Event( 'EverythingImage::ImageLoaded' );
+    image.dispatchEvent( event );
+  };
+
+  const lazyLoadInstance = new LazyLoad( {
     elements_selector: '.lazy',
-    callback_reveal: callback_reveal // For background images
+    callback_reveal: callback_reveal,
+    callback_loaded: callback_loaded // For background images
   } );
 } );
 
