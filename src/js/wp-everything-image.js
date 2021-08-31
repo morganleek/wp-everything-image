@@ -17,14 +17,14 @@ window.addEventListener( 'load', () => {
     
     //  Image finshed animating
     if( image.tagName.toUpperCase() == "IMG" ) {
-      setTimeout( function( image ) {
+      setTimeout( () => {
         image.classList.add( 'lazy-reveal' );
       }, 501, image ); 
     }
   };
 
   lazyLoadInstance = new LazyLoad( {
-    elements_selector: ".lazy",
+    elements_selector: '.lazy',
     callback_reveal: callback_reveal // For background images
   } );
 } );
