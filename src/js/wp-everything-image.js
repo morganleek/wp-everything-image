@@ -38,6 +38,8 @@ document.addEventListener( 'EverythingImage::Update', () => {
   // Call event 'EverythingImage::Update' when adding dynamic images
   // `const event = new Event( 'EverythingImage::Update' );
   //  document.dispatchEvent( event );`
-  weiLazyLoad.update();
+  if( weiLazyLoad ) {
+    weiLazyLoad.update();
+  }
 } );
 
