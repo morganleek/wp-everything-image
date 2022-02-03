@@ -34,6 +34,8 @@ window.addEventListener( 'load', () => {
   } );
 } );
 
+// Listen for 'EverythingImage::Update' event for ajax
+// generated images
 document.addEventListener( 'EverythingImage::Update', () => {
   // Call event 'EverythingImage::Update' when adding dynamic images
   // `const event = new Event( 'EverythingImage::Update' );

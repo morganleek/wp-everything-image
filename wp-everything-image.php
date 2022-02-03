@@ -39,19 +39,30 @@
 	require_once 'inc/ajax.php';
 	require_once 'inc/image.php';
 
-	// Scripts
+	// Enque Front-end Scripts
 	function wei_enqueue_scripts() {
 		// global $PLUGIN_URL;
 
-		wp_register_script('everything-image', WEI__PLUGIN_URL . 'dist/js/wp-everything-image.js', array('jquery'), '1.3.2');
-		wp_enqueue_script('everything-image');	
+		wp_register_script( 'everything-image', WEI__PLUGIN_URL . 'dist/js/wp-everything-image.js', array(), WEI__VERSION );
+		wp_enqueue_script( 'everything-image' );	
 
-		wp_register_style('everything-image', WEI__PLUGIN_URL . 'dist/css/wp-everything-image.css', array(), '1.3.2');
-		wp_enqueue_style('everything-image');
+		wp_register_style( 'everything-image', WEI__PLUGIN_URL . 'dist/css/wp-everything-image.css', array(), WEI__VERSION );
+		wp_enqueue_style( 'everything-image' );
 
-		wp_localize_script('everything-image', 'wei', array('ajax_url' => admin_url('admin-ajax.php')));
+		wp_localize_script( 'everything-image', 'wei', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 	}
+	
 	add_action( 'wp_enqueue_scripts', 'wei_enqueue_scripts' );
+
+	// Enqueue Editors Scripts
+	function wei_enqueue_block_editor_assets() {
+		// Editor Styles
+		wp_enqueue_style( 'everything-image-admin', WEI__PLUGIN_URL . 'dist/css/wp-everything-image.css', array(), WEI__VERSION, 'all' );
+		// Editor Scripts
+		wp_enqueue_script( 'everything-image-admin', WEI__PLUGIN_URL . 'dist/js/wp-everything-image.js', array(), WEI__VERSION, true );
+	}
+
+	add_action( 'enqueue_block_editor_assets', 'wei_enqueue_block_editor_assets' );
 
 	// Add fly image resizer dependency
 
