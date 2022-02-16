@@ -452,20 +452,20 @@
 	// Shortcode for Testing
 	function wei_shortcode( $atts, $content = '' ) {
 		if( isset( $atts['id'] ) ) {
-			return wei_image( // Image as Picture tag
+			return wei_image( 
 				$atts['id'], 
 				array(
 					'type' => 'image',
-					'class' => 'extra-classes', // Additional classes space seperated
+					'class' => 'extra-classes', 
 					'sizes' => array(
-						'1500' => array(1500, 300, true), // 1x 1500x300, 2x 3000x600 and crop
-						'1200' => array(1200, 240, true), // ...
-						'992' => array(992, 199, true), // ...
-						'768' => array(768, 400, true), // ...
-						'1' => array(375, 0, false) // Resize to 1x 375x{maintain-aspect} 2x 750x{maintain-aspect}
+						'1500' => array(1500, 300, true), 
+						'1200' => array(1200, 240, true), 
+						'992' => array(992, 199, true), 
+						'768' => array(768, 400, true), 
+						'1' => array(375, 0, false) 
 					),
-					'content' => '<h1>Some Content</h1>', // Optional
-					'alt' => 'Alt <h1>tag</h1> text', // Optional
+					'content' => '<h1>Some Content</h1>', 
+					'alt' => 'Alt tag text', 
 					'return' => true
 				)
 			);
