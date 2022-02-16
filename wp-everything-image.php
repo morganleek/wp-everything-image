@@ -187,17 +187,19 @@
 					$last = array_pop($_args['images']);
 
 					$alts = array();
-					if(!empty($attachment['caption'])) {
-						$alts[] = $attachment['caption'];
-					}
-					if(!empty($attachment['alt'])) {
-						$alts[] = $attachment['alt'];
-					}
-					if(!empty($attachment['description'])) {
-						$alts[] = $attachment['description'];
-					} 
 					if(!empty($_args['alt'])) {
-						$alts[] = $_args['alt'];
+						$alts[] = wp_strip_all_tags( $_args['alt'] );
+					}
+					else {
+						if(!empty($attachment['caption'])) {
+							$alts[] = wp_strip_all_tags( $attachment['caption'] );
+						}
+						if(!empty($attachment['alt'])) {
+							$alts[] = wp_strip_all_tags( $attachment['alt'] );
+						}
+						if(!empty($attachment['description'])) {
+							$alts[] = wp_strip_all_tags( $attachment['description'] );
+						} 
 					}
 
 					$html .= '<img class="lazy" src="' . wei_generate_svg($last[3], $last[4]) . '" data-src="' . $last[1] . '" alt="' . implode(' ', $alts) . '" width="' . $last[3] . '" height="' . $last[4] . '">';
@@ -446,3 +448,28 @@
 	}
 
 	add_action( 'wp_ajax_wei_image_js', 'wei_image_js' );
+
+	// Shortcode for Testing
+	function wei_shortcode( $atts, $content = '' ) {
+		if( isset( $atts['id'] ) ) {
+			return wei_image( // Image as Picture tag
+				$atts['id'], 
+				array(
+					'type' => 'image',
+					'class' => 'extra-classes', // Additional classes space seperated
+					'sizes' => array(
+						'1500' => array(1500, 300, true), // 1x 1500x300, 2x 3000x600 and crop
+						'1200' => array(1200, 240, true), // ...
+						'992' => array(992, 199, true), // ...
+						'768' => array(768, 400, true), // ...
+						'1' => array(375, 0, false) // Resize to 1x 375x{maintain-aspect} 2x 750x{maintain-aspect}
+					),
+					'content' => '<h1>Some Content</h1>', // Optional
+					'alt' => 'Alt <h1>tag</h1> text', // Optional
+					'return' => true
+				)
+			);
+		}
+	}
+
+	add_shortcode( 'wei_test', 'wei_shortcode' );
